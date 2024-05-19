@@ -7,9 +7,9 @@ app.config.from_object(__name__)
 
 CORS(app, resources={r"/*":{'origins':"*"}})
 
-@app.route('/', methods=['GET'])
+@app.route('/record', methods=['GET'])
 def test():
-    return("Hello!")
+    return("axios test")
 
 if __name__ == "__main__":
     app.run(debug=True)
