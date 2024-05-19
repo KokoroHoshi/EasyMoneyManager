@@ -1,7 +1,9 @@
 <template>
   <TitleBar title="Record" />
 
-  <div class="container">{{ test }}</div>
+  <div class="container">
+    <RecordCard />
+  </div>
 
   <BottomNavbar />
 </template>
@@ -9,19 +11,22 @@
 <script>
 import TitleBar from "@/components/TitleBar.vue";
 import BottomNavbar from "@/components/BottomNavbar.vue";
+import RecordCard from "@/components/RecordCard.vue";
+
 import axios from "axios";
 
 export default {
   components: {
     TitleBar,
     BottomNavbar,
+    RecordCard,
   },
   created() {
-    this.getResponse();
+    // this.getResponse();
   },
   data() {
     return {
-      test: "",
+      // test: "",
     };
   },
   methods: {
