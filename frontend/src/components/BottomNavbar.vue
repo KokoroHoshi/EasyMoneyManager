@@ -1,19 +1,21 @@
 <template>
-  <div class="bottom-navbar">
-    <nav class="navbar navbar-expand-lg">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+  <nav class="navbar fixed-bottom navbar-expand-lg navbar-dark bg-dark">
+    <div class="mx-auto">
+      <ul class="navbar-nav text-center">
         <li>
-          <router-link to="/investment">Investment</router-link>
+          <router-link to="/investment" class="nav-link"
+            >Investment</router-link
+          >
         </li>
         <li>
-          <router-link to="/record">Record</router-link>
+          <router-link to="/record" class="nav-link active">Record</router-link>
         </li>
         <li>
-          <router-link to="/history">History</router-link>
+          <router-link to="/history" class="nav-link">History</router-link>
         </li>
       </ul>
-    </nav>
-  </div>
+    </div>
+  </nav>
 </template>
 
 <script>

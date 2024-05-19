@@ -1,7 +1,7 @@
 <template>
-  <div class="title-bar">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <h1>{{ title }}</h1>
-  </div>
+  </nav>
 </template>
 
 <script>
