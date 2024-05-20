@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -11,19 +11,27 @@ CORS(app, resources={r"/*":{'origins':"*"}})
 def test():
     return("axios test")
 
-@app.route('/api/stock-data', methods=['GET'])
+@app.route('/api/get-stock-data', methods=['GET'])
 def get_stock_data():
     stock_data = [
-        [1537795800000, 55.2],
-        [1537882200000, 55.55],
-        [1537968600000, 55.1],
-        [1538055000000, 56.24],
-        [1538141400000, 56.44],
-        [1538400600000, 56.81],
-        [1538487000000, 57.32],
-        [1538573400000, 58.02],
-        [1538659800000, 57]
+        {
+            "date": "2012-04-02",
+            "open": 85.9757,
+            "high": 90.6657,
+            "low": 85.7685,
+            "close": 90.5257,
+            "volume": 660187068,
+        },
+        {
+            "date": "2012-04-09",
+            "open": 89.4471,
+            "high": 92,
+            "low": 86.2157,
+            "close": 86.4614,
+            "volume": 912634864,
+        }
     ]
+
     return jsonify(stock_data)
 
 if __name__ == "__main__":

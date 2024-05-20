@@ -1,107 +1,95 @@
 <template>
-  <vue-highcharts
-    type="stockChart"
-    :options="chartOptions"
-    :redrawOnUpdate="true"
-    :oneToOneUpdate="false"
-    :animateOnUpdate="true"
-    @updated="onUpdated"
-  />
+  <div class="contain">
+    <CanvasJSStockChart :options="options" :style="styleOptions" />
+  </div>
 </template>
 
 <script>
 import axios from "axios";
-import VueHighcharts from "vue3-highcharts";
-import HighCharts from "highcharts";
-import StockCharts from "highcharts/modules/stock";
-
-StockCharts(HighCharts);
+import CanvasJSStockChart from "@canvasjs/vue-stockcharts";
 
 export default {
-  components: {
-    VueHighcharts,
+  components: { CanvasJSStockChart },
+  created() {
+    this.fetchData();
   },
-  //   setup() {
-  //     const chartOptions = {
-  //       rangeSelector: {
-  //         selected: 1,
-  //       },
-
-  //       title: {
-  //         text: "Stock Prices",
-  //       },
-  //       series: [
-  //         {
-  //           name: "MyStock",
-  //           data: [],
-  //         },
-  //       ],
-  //     };
-
-  //     const fetchData = async () => {
-  //       try {
-  //         const response = await axios.get(
-  //           "http://localhost:5000/api/stock-data"
-  //         );
-  //         chartOptions.series[0].data = response.data;
-  //       } catch (error) {
-  //         console.error("Error fetching stock data:", error);
-  //       }
-  //     };
-
-  //     fetchData();
-
-  //     return {
-  //       chartOptions,
-  //     };
-  //   },
   data() {
     return {
-      chartOptions: {
-        rangeSelector: {
-          selected: 1, // 3m
-          buttons: [
-            { type: "month", count: 1, text: "1m" },
-            { type: "month", count: 3, text: "3m" },
-            { type: "month", count: 6, text: "6m" },
-            { type: "ytd", text: "YTD" },
-            { type: "year", count: 1, text: "1y" },
-            { type: "all", text: "All" },
-          ],
-          inputEnabled: true,
-        },
+      stock_data: {},
+      dps1: [],
+      dps2: [],
+      chart: null,
+      options: {
+        exportEnabled: true,
+        theme: "light2",
         title: {
-          text: "Stock Prices",
+          text: "Vue.js StockChart with Date-Time Axis",
         },
-        series: [
+        subtitles: [
           {
-            name: "MyStock",
-            data: [],
+            text: "Stock Price",
           },
         ],
+        charts: [
+          {
+            axisY: {
+              title: "Price",
+              prefix: "$",
+              tickLength: 0,
+            },
+            data: [
+              {
+                type: "candlestick",
+                name: "Price (in USD)",
+                yValueFormatString: "$#,###.##",
+                dataPoints: [],
+              },
+            ],
+          },
+        ],
+        navigator: {
+          data: [
+            {
+              dataPoints: [],
+            },
+          ],
+          slider: {
+            minimum: new Date(2020, 1, 1),
+            maximum: new Date(2020, 11, 1),
+          },
+        },
+      },
+      styleOptions: {
+        width: "50%",
+        height: "200px",
       },
     };
   },
+
   methods: {
-    async fetchData(selected) {
+    async fetchData() {
       try {
-        const response = await axios.post(
-          "http://localhost:5000/api/stock-data",
-          { selected }
+        const response = await axios.get(
+          "http://localhost:5000/api/get-stock-data"
         );
-        this.chartOptions.series[0].data = response.data;
+        this.stock_data = response.data;
+
+        this.dps1 = [];
+        this.dps2 = [];
+
+        this.stock_data.forEach((data) => {
+          this.dps1.push({
+            x: new Date(data.date),
+            y: [data.open, data.high, data.low, data.close],
+          });
+          this.dps2.push({ x: new Date(data.date), y: data.close });
+        });
+
+        this.options.charts[0].data[0].dataPoints = this.dps1;
+        this.options.navigator.data[0].dataPoints = this.dps2;
       } catch (error) {
         console.error("Error fetching stock data:", error);
       }
-    },
-
-    onUpdated() {
-      console.log("Chart updated");
-    },
-  },
-  watch: {
-    "chartOptions.rangeSelector.selected"(newVal) {
-      console.log(newVal);
     },
   },
 };

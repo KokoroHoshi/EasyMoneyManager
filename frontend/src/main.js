@@ -2,9 +2,15 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 
-// install bootstrap first
+// install bootstrap
 import "bootstrap/dist/css/bootstrap.css";
-// install vue3-highcharts
-import VueHighcharts from "vue3-highcharts";
+// install @canvasjs/charts
+// https://www.npmjs.com/package/@canvasjs/vue-stockcharts
+import CanvasJSStockChart from "@canvasjs/vue-stockcharts";
 
-createApp(App).use(router).use(VueHighcharts).mount("#app");
+const app = createApp(App);
+
+app.use(router);
+app.use(CanvasJSStockChart);
+
+app.mount("#app");
