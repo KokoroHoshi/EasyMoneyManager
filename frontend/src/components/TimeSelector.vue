@@ -16,7 +16,7 @@
           {{ month }}
         </option>
       </select>
-      <select class="form-select" v-model="selectedDay">
+      <select class="form-select" v-model="selectedDay" @change="updateDate">
         <option v-for="day in daysInMonth" :key="day" :value="day">
           {{ day }}
         </option>
@@ -70,6 +70,13 @@ export default {
       if (this.selectedDay > daysInSelectedMonth) {
         this.selectedDay = daysInSelectedMonth;
       }
+
+      const selectedDate = new Date(
+        this.selectedYear,
+        this.selectedMonth - 1,
+        this.selectedDay
+      );
+      alert(`Selected Date: ${selectedDate.toDateString()}`);
     },
   },
 };
