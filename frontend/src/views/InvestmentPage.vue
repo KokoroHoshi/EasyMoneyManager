@@ -15,8 +15,6 @@ import BottomNavbar from "@/components/BottomNavbar.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import StockView from "@/components/StockView.vue";
 
-import axios from "axios";
-
 export default {
   components: {
     TitleBar,
@@ -24,27 +22,10 @@ export default {
     SearchBar,
     StockView,
   },
-  created() {
-    // this.getResponse();
-  },
+  created() {},
   data() {
-    return {
-      // test: "",
-    };
+    return {};
   },
-  methods: {
-    getResponse() {
-      const path = "http://localhost:5000/record";
-      axios
-        .get(path)
-        .then((res) => {
-          console.log(res.data);
-          this.test = res.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-  },
+  methods: {},
 };
 </script>

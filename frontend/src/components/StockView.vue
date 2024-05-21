@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     fetchStockData() {
-      const path = `http://127.0.0.1:5000/api/stock?timescale=${this.selectedTimeScale}`;
+      const path = `http://localhost:5000/api/get/stock?timescale=${this.selectedTimeScale}`;
       axios
         .get(path)
         .then((res) => {

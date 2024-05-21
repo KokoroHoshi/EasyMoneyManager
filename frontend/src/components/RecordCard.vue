@@ -41,15 +41,19 @@
     </div>
 
     <div class="mx-auto">
-      <button class="btn btn-danger me-2" @click="handleExpense">
+      <button class="btn btn-danger me-2" @click="submit('expense')">
         expense
       </button>
-      <button class="btn btn-success me-2" @click="handleIncome">income</button>
+      <button class="btn btn-success me-2" @click="submit('income')">
+        income
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -65,6 +69,7 @@ export default {
       ],
       selectedTags: [],
       type: "",
+      date: "",
     };
   },
   methods: {
@@ -74,21 +79,32 @@ export default {
         this.tags.push(newTag);
       }
     },
-    handleExpense() {
-      this.type = "expense";
-      alert(
-        `${this.type}: name - ${this.name}, amount - ${
-          this.amount
-        }, tags - ${this.selectedTags.join(", ")}`
-      );
-    },
-    handleIncome() {
-      this.type = "income";
-      alert(
-        `${this.type}: name - ${this.name}, amount - ${
-          this.amount
-        }, tags - ${this.selectedTags.join(", ")}`
-      );
+    submit(type) {
+      this.date = new Date().toISOString();
+      this.type = type;
+
+      const payload = {
+        type: this.type,
+        name: this.name,
+        amount: this.amount,
+        tags: this.selectedTags,
+        date: this.date,
+      };
+
+      axios
+        .post("http://localhost:5000/api/post/record", payload)
+        .then((response) => {
+          console.log("Data saved:", response.data);
+        })
+        .catch((error) => {
+          console.error("Error saving data:", error);
+        });
+
+      // alert(
+      //   `${this.type}: name - ${this.name}, amount - ${
+      //     this.amount
+      //   }, tags - ${this.selectedTags.join(", ")}, date - ${this.date}`
+      // );
     },
   },
 };
