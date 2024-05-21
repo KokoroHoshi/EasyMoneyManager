@@ -16,7 +16,11 @@
           </select>
         </div>
         <div class="chart-container">
-          <line-chart :data="chartData" :options="chartOptions"></line-chart>
+          <line-chart
+            :data="chartData"
+            :options="chartOptions"
+            :key="chartKey"
+          ></line-chart>
         </div>
       </div>
     </div>
@@ -26,11 +30,28 @@
 <script>
 import axios from "axios";
 import { Line } from "vue-chartjs";
-import { Chart as ChartJS, registerables } from "chart.js";
-ChartJS.register(...registerables);
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 export default {
-  name: "StockView",
   components: {
     "line-chart": Line,
   },
@@ -38,6 +59,7 @@ export default {
     return {
       timeScales: ["1D", "1W", "1M", "1Y"],
       selectedTimeScale: "1D",
+      chartKey: 0, // use this to force the line chart re-render temporary
       chartData: {
         labels: [],
         datasets: [
@@ -51,28 +73,30 @@ export default {
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
-        scales: {
-          y: {
-            beginAtZero: false,
-          },
-        },
       },
     };
   },
   created() {
-    this.getResponse();
+    this.fetchStockData();
+  },
+  watch: {
+    chartData: {
+      handler() {
+        this.chartKey += 1;
+      },
+      deep: true,
+    },
   },
   methods: {
-    getResponse() {
+    fetchStockData() {
       const path = `http://127.0.0.1:5000/api/stock?timescale=${this.selectedTimeScale}`;
       axios
         .get(path)
         .then((res) => {
           const data = res.data;
-          console.log(data);
 
-          this.chartData.labels = [0, 1, 2];
-          this.chartData.datasets[0].data = [1, 2, 3];
+          this.chartData.labels = data.map((point) => point.date);
+          this.chartData.datasets[0].data = data.map((point) => point.price);
         })
         .catch((err) => {
           console.log(err);
