@@ -3,6 +3,13 @@
 
   <div class="container">
     <TimeSelector />
+    <div
+      class="records-container"
+      v-for="(record, index) in records"
+      :key="index"
+    >
+      <RecordView :record="record" />
+    </div>
   </div>
 
   <BottomNavbar />
@@ -12,36 +19,60 @@
 import TitleBar from "@/components/TitleBar.vue";
 import BottomNavbar from "@/components/BottomNavbar.vue";
 import TimeSelector from "@/components/TimeSelector.vue";
+import RecordView from "@/components/RecordView.vue";
 
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   components: {
     TitleBar,
     BottomNavbar,
     TimeSelector,
+    RecordView,
   },
   created() {
     // this.getResponse();
   },
   data() {
     return {
-      // test: "",
+      records: [
+        {
+          date: "2024-05-19",
+          name: "cake",
+          amount: 360,
+          tags: ["Food", "Gift", "i don't know"],
+          type: "expense",
+        },
+        {
+          date: "2024-05-20",
+          name: "dinner",
+          amount: 100,
+          tags: ["Food"],
+          type: "expense",
+        },
+        {
+          date: "2024-05-21",
+          name: "t-shirt",
+          amount: 399,
+          tags: ["Clothing"],
+          type: "income",
+        },
+      ],
     };
   },
   methods: {
-    getResponse() {
-      const path = "http://localhost:5000/record";
-      axios
-        .get(path)
-        .then((res) => {
-          console.log(res.data);
-          this.test = res.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
+    // getResponse() {
+    //   const path = "http://localhost:5000/record";
+    //   axios
+    //     .get(path)
+    //     .then((res) => {
+    //       console.log(res.data);
+    //       this.test = res.data;
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // },
   },
 };
 </script>

@@ -64,6 +64,7 @@ export default {
         "Entertainment",
       ],
       selectedTags: [],
+      type: "",
     };
   },
   methods: {
@@ -74,15 +75,17 @@ export default {
       }
     },
     handleExpense() {
+      this.type = "expense";
       alert(
-        `expense: name - ${this.name}, amount - ${
+        `${this.type}: name - ${this.name}, amount - ${
           this.amount
         }, tags - ${this.selectedTags.join(", ")}`
       );
     },
     handleIncome() {
+      this.type = "income";
       alert(
-        `income: name - ${this.name}, amount - ${
+        `${this.type}: name - ${this.name}, amount - ${
           this.amount
         }, tags - ${this.selectedTags.join(", ")}`
       );
