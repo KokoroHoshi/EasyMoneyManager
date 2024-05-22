@@ -4,7 +4,6 @@
       <div class="col-12">
         <div class="mb-3">
           <label for="timeScale" class="form-label">Time Scale</label>
-          <p>test</p>
           <select
             id="timeScale"
             class="form-select"
