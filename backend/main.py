@@ -9,9 +9,25 @@ app.config.from_object(__name__)
 
 CORS(app, resources={r"/*":{'origins':"*"}})
 
-@app.route('/record', methods=['GET'])
-def test():
-    return("axios test")
+@app.route('/api/get/record', methods=['GET'])
+def get_record():
+    rid = request.args.get('rid')
+
+    if not rid:
+        return jsonify({"error": "Record ID is required"}), 400
+
+    # fetch data from database with rid
+
+    record = {
+        "rid": "001",
+        "date": "2024-05-19",
+        "name" : "cake",
+        "amount": 360,
+        "tags": ["Food", "Gift", "i don't know"],
+        "type": "expense"
+    }
+    
+    return jsonify(record)
 
 @app.route('/api/post/record', methods=['POST'])
 def add_record():

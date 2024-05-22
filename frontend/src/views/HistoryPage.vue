@@ -37,6 +37,7 @@ export default {
     return {
       records: [
         {
+          rid: "001",
           date: "2024-05-19",
           name: "cake",
           amount: 360,
@@ -44,6 +45,7 @@ export default {
           type: "expense",
         },
         {
+          rid: "002",
           date: "2024-05-20",
           name: "dinner",
           amount: 100,
@@ -51,6 +53,7 @@ export default {
           type: "expense",
         },
         {
+          rid: "003",
           date: "2024-05-21",
           name: "t-shirt",
           amount: 399,

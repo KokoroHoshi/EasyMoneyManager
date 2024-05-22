@@ -5,7 +5,7 @@
       'bg-danger': record.type === 'expense',
       'bg-success': record.type === 'income',
     }"
-    @click="showAlert"
+    @click="navigateToEdit"
   >
     <div class="card-body">
       <h5 class="card-title">{{ record.name }}</h5>
@@ -39,8 +39,10 @@ export default {
     },
   },
   methods: {
-    showAlert() {
-      alert("You clicked on: " + this.record.name);
+    navigateToEdit() {
+      // alert("You clicked on: " + this.record.name);
+      console.log(this.record.rid);
+      this.$router.push({ name: "EditPage", query: { rid: this.record.rid } });
     },
   },
 };
