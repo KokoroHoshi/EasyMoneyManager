@@ -1,4 +1,6 @@
 <template>
+  <SearchBar :search-query="searchQuery" @search="searchQuery = $event" />
+
   <div class="container">
     <div class="row">
       <div class="col-12">
@@ -41,6 +43,8 @@ import {
   Legend,
 } from "chart.js";
 
+import SearchBar from "./SearchBar.vue";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -54,9 +58,11 @@ ChartJS.register(
 export default {
   components: {
     "line-chart": Line,
+    SearchBar,
   },
   data() {
     return {
+      searchQuery: "",
       stockId: "2330",
       timeScales: ["1D", "1W", "1M", "1Y"],
       selectedTimeScale: "1D",
@@ -87,6 +93,10 @@ export default {
       },
       deep: true,
     },
+    searchQuery(newSearchQuery) {
+      this.stockId = newSearchQuery;
+      this.fetchStockData();
+    },
   },
   methods: {
     fetchStockData() {
@@ -95,9 +105,30 @@ export default {
         .get(path)
         .then((res) => {
           const data = res.data;
+          console.log(data);
 
-          this.chartData.labels = data.map((point) => point.date);
-          this.chartData.datasets[0].data = data.map((point) => point.price);
+          const labels = [];
+          const datasetData = [];
+          const timestamps = Object.keys(data);
+
+          timestamps.forEach((timestamp) => {
+            labels.push(timestamp);
+
+            const stockData = data[timestamp];
+
+            // need to check vue-chartjs how to include all messages below in line-chart
+            // const stockInfo = {
+            //   Close: stockData.Close,
+            //   Open: stockData.Open,
+            //   High: stockData.High,
+            //   Low: stockData.Low,
+            //   Volume: stockData.Volume,
+            // };
+            datasetData.push(stockData.Close);
+          });
+
+          this.chartData.labels = labels;
+          this.chartData.datasets[0].data = datasetData;
         })
         .catch((err) => {
           console.log(err);

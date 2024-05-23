@@ -24,8 +24,7 @@ export default {
   },
   methods: {
     search() {
-      // Perform search action here
-      alert(`Searching for: ${this.searchQuery}`);
+      this.$emit("search", this.searchQuery);
     },
     onSearchInput() {
       // Handle input event if needed
