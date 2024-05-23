@@ -25,23 +25,37 @@ def get_stock_by_id(stock_id, timescale):
     current_time = datetime.now()
 
     if timescale == '1D':
-        data = stock.history(start=current_time.strftime('%Y-%m-%d'), interval='5m')
+        if current_time.time() < datetime.strptime('09:00:00', '%H:%M:%S').time():
+            start_time = (current_time - timedelta(days=1))
+        else:
+            start_time = current_time
+        data = stock.history(start=start_time.strftime('%Y-%m-%d'), interval='5m')
+        data = data.to_dict(orient='index')
+        data = {
+            timestamp.to_pydatetime().strftime('%Y-%m-%d %H:%M'): values for timestamp, values in data.items()
+        }
     elif timescale == '1W':
         start_time = current_time - timedelta(weeks=1)
         data = stock.history(start=start_time.strftime('%Y-%m-%d'), end=(current_time + timedelta(weeks=1)).strftime('%Y-%m-%d'), interval='1h')    
+        data = data.to_dict(orient='index')
+        data = {
+            timestamp.to_pydatetime().strftime('%Y-%m-%d %H:%M'): values for timestamp, values in data.items()
+        }
     elif timescale == '1M':
         start_time = current_time - timedelta(days=30)
         data = stock.history(start=start_time.strftime('%Y-%m-%d'), end=(current_time + timedelta(weeks=1)).strftime('%Y-%m-%d'), interval='1d')    
+        data = data.to_dict(orient='index')
+        data = {
+            timestamp.to_pydatetime().strftime('%Y-%m-%d'): values for timestamp, values in data.items()
+        }
     elif timescale == '1Y':
         start_time = current_time - timedelta(days=365)
         data = stock.history(start=start_time.strftime('%Y-%m-%d'), end=(current_time + timedelta(weeks=1)).strftime('%Y-%m-%d'), interval='5d')
+        data = data.to_dict(orient='index')
+        data = {
+            timestamp.to_pydatetime().strftime('%Y-%m-%d'): values for timestamp, values in data.items()
+        }
     else:
         raise ValueError("Invalid timescale")
-
-
-    data = data.to_dict(orient='index')
-    data = {
-        timestamp.to_pydatetime().strftime('%Y-%m-%d %H:%M:%S'): values for timestamp, values in data.items()
-    }
   
     return data

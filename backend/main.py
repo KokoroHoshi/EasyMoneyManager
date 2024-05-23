@@ -77,7 +77,7 @@ def add_record():
     date = datetime.strptime(data['date'], datetime_format)
     type = data['type']
     
-    print(date)
+    print(data)
 
     # something like
     # new_record = Record(name=name, amount=amount, tags=tags, date=date, type=type)
@@ -85,14 +85,6 @@ def add_record():
     # db.session.commit()
 
     return jsonify({'message': 'Record added successfully'})
-
-# @app.route('/api/get/stock', methods=['GET'])
-# def get_stock_data():
-#     # escape later
-#     timescale = request.args.get('timescale', '1D')
-#     data = get_stock_data_by_timescale(timescale)
-#     return jsonify(data)
-
 
 @app.route('/api/get/stock', methods=['GET'])
 def get_stock_by_code_route():
