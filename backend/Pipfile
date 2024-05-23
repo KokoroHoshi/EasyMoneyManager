@@ -6,7 +6,14 @@ name = "pypi"
 [packages]
 flask = "==3.0.3"
 flask-cors = "==4.0.1"
+<<<<<<< HEAD
 yfinance = "*"
+=======
+colorama = "*"
+twstock = "*"
+pandas = "*"
+lxml = "*"
+>>>>>>> 787ccce88344d9f80d12ae6b75dfb64012ab9876
 
 [dev-packages]
 
