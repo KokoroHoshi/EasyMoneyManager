@@ -44,7 +44,7 @@ export default {
         return;
       }
       console.log(recordId);
-      const path = "http://localhost:5000/api/get/record?rid=${recordId}";
+      const path = `http://localhost:5000/api/get/record?rid=${recordId}`;
       axios
         .get(path)
         .then((res) => {

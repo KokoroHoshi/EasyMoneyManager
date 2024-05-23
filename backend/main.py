@@ -15,8 +15,7 @@ CORS(app, resources={r"/*":{'origins':"*"}})
 def get_record_by_rid():
     rid = request.args.get('rid')
 
-    # something went wrong
-    print(rid) # ${recordId}
+    print(rid)
 
     if not rid:
         return jsonify({"error": "Record ID is required"}), 400
@@ -34,7 +33,7 @@ def get_record_by_rid():
     
     return jsonify(record)
 
-@app.route('/api/get/all-records', methods=['GET'])
+@app.route('/api/get/all_records', methods=['GET'])
 def get_all_records():
     # fetch data from database
 
