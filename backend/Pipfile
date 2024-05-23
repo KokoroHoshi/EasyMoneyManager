@@ -6,6 +6,10 @@ name = "pypi"
 [packages]
 flask = "==3.0.3"
 flask-cors = "==4.0.1"
+colorama = "*"
+twstock = "*"
+pandas = "*"
+lxml = "*"
 
 [dev-packages]
 

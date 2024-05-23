@@ -57,6 +57,7 @@ export default {
   },
   data() {
     return {
+      stockId: "2330",
       timeScales: ["1D", "1W", "1M", "1Y"],
       selectedTimeScale: "1D",
       chartKey: 0, // use this to force the line chart re-render temporary
@@ -89,7 +90,7 @@ export default {
   },
   methods: {
     fetchStockData() {
-      const path = `http://localhost:5000/api/get/stock?timescale=${this.selectedTimeScale}`;
+      const path = `http://localhost:5000/api/get/stock?stock_id=${this.stockId}&timescale=${this.selectedTimeScale}`;
       axios
         .get(path)
         .then((res) => {
