@@ -3,12 +3,12 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-12">
+      <div v-if="stockId && stockName" class="col-12">
         <div class="mb-3">
-          <h4>{{ stockName }} ({{ stockId }})</h4>
+          <h3>{{ stockName }} ({{ stockId }})</h3>
         </div>
         <div class="mb-3">
-          <h5>{{ currentPrice }}</h5>
+          <h5>current price: {{ currentPrice }}</h5>
         </div>
         <div class="mb-3">
           <label for="timeScale" class="form-label">Time Scale</label>
@@ -31,6 +31,7 @@
           ></line-chart>
         </div>
       </div>
+      <div v-else class="col-12 no-data">No data</div>
     </div>
   </div>
 </template>
@@ -69,8 +70,8 @@ export default {
   data() {
     return {
       searchQuery: "",
-      stockId: "2330",
-      stockName: "台積電",
+      stockId: "",
+      stockName: "",
       currentPrice: "",
       timeScales: ["1D", "1W", "1M", "1Y"],
       selectedTimeScale: "1D",
@@ -170,5 +171,11 @@ export default {
   position: relative;
   height: 200px;
   width: 100%;
+}
+.no-data {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  text-align: center;
+  color: #777;
 }
 </style>
