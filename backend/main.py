@@ -86,12 +86,20 @@ def add_record():
 
     return jsonify({'message': 'Record added successfully'})
 
-@app.route('/api/get/stock', methods=['GET'])
-def get_stock_by_code_route():
+@app.route('/api/get/stock_info', methods=['GET'])
+def get_stock_info_by_id_route():
+    stock_id = request.args.get('stock_id', default='2330', type=str)
+
+    result = get_stock_info_by_id(stock_id)
+
+    return jsonify(result)
+
+@app.route('/api/get/stock_data', methods=['GET'])
+def get_stock_data_by_id_route():
     stock_id = request.args.get('stock_id', default='2330', type=str)
     timescale = request.args.get('timescale', default='1D', type=str)
 
-    result = get_stock_by_id(stock_id, timescale)
+    result = get_stock_data_by_id(stock_id, timescale)
 
     return jsonify(result)
 

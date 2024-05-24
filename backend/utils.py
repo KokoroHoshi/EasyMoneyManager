@@ -1,3 +1,4 @@
+import twstock
 import yfinance as yf
 from datetime import datetime, timedelta
 
@@ -5,7 +6,23 @@ def check_stock_exist(symbol):
     stock = yf.Ticker(symbol)
     return 'symbol' in stock.info
 
-def get_stock_by_id(stock_id, timescale):
+def get_stock_info_by_id(stock_id):
+    stock = twstock.realtime.get(stock_id)
+    
+    if not stock['success']:
+        return None
+    
+    data = get_stock_data_by_id(stock_id, '1D')
+    
+    info = {
+        'stock_name': stock['info']['fullname'],
+        'stock_id': stock['info']['code'],
+        'current_price': round(data[list(data)[-1]]['Close'], 2)
+    }
+
+    return info
+
+def get_stock_data_by_id(stock_id, timescale):
     # interval
     # 1 2 5 15 30 60 90m
     # 1h

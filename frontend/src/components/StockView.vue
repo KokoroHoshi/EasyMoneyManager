@@ -5,6 +5,12 @@
     <div class="row">
       <div class="col-12">
         <div class="mb-3">
+          <h4>{{ stockName }} ({{ stockId }})</h4>
+        </div>
+        <div class="mb-3">
+          <h5>{{ currentPrice }}</h5>
+        </div>
+        <div class="mb-3">
           <label for="timeScale" class="form-label">Time Scale</label>
           <select
             id="timeScale"
@@ -64,6 +70,8 @@ export default {
     return {
       searchQuery: "",
       stockId: "2330",
+      stockName: "台積電",
+      currentPrice: "",
       timeScales: ["1D", "1W", "1M", "1Y"],
       selectedTimeScale: "1D",
       chartKey: 0, // use this to force the line chart re-render temporary
@@ -95,12 +103,28 @@ export default {
     },
     searchQuery(newSearchQuery) {
       this.stockId = newSearchQuery;
+      this.fetchStockInfo();
       this.fetchStockData();
     },
   },
   methods: {
+    fetchStockInfo() {
+      const path = `http://localhost:5000/api/get/stock_info?stock_id=${this.stockId}`;
+      axios
+        .get(path)
+        .then((res) => {
+          const data = res.data;
+          console.log(data);
+
+          this.stockName = data["stock_name"];
+          this.currentPrice = data["current_price"];
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     fetchStockData() {
-      const path = `http://localhost:5000/api/get/stock?stock_id=${this.stockId}&timescale=${this.selectedTimeScale}`;
+      const path = `http://localhost:5000/api/get/stock_data?stock_id=${this.stockId}&timescale=${this.selectedTimeScale}`;
       axios
         .get(path)
         .then((res) => {
