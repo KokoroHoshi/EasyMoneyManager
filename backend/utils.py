@@ -13,7 +13,7 @@ def get_stock_info_by_id(stock_id):
         return None
     
     data = get_stock_data_by_id(stock_id, '1D')
-    
+
     info = {
         'stock_name': stock['info']['fullname'],
         'stock_id': stock['info']['code'],
@@ -42,10 +42,15 @@ def get_stock_data_by_id(stock_id, timescale):
     current_time = datetime.now()
 
     if timescale == '1D':
-        if current_time.time() < datetime.strptime('09:00:00', '%H:%M:%S').time():
-            start_time = (current_time - timedelta(days=1))
+        if current_time.weekday() == 5: # Saturday
+            start_time = (current_time - timedelta(days=1)).replace(hour=9, minute=0, second=0)
+        elif current_time.weekday() == 6: # Sunday
+            start_time = (current_time - timedelta(days=2)).replace(hour=9, minute=0, second=0)
+        elif current_time.time() < datetime.strptime('09:00:00', '%H:%M:%S').time():
+            start_time = (current_time - timedelta(days=1)).replace(hour=9, minute=0, second=0)
         else:
             start_time = current_time
+
         data = stock.history(start=start_time.strftime('%Y-%m-%d'), interval='5m')
         data = data.to_dict(orient='index')
         data = {
