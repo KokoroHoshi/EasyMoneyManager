@@ -18,6 +18,7 @@
         />
       </button>
       <ul
+        id="dropdown-menu"
         class="dropdown-menu dropdown-menu-end mt-2 me-2"
         aria-labelledby="userDropdown"
         :class="{ show: isDropdownOpen }"
@@ -31,7 +32,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from "@/useAuth";
 import { googleLogout } from "vue3-google-login";
@@ -45,7 +46,7 @@ export default {
   },
   setup() {
     const router = useRouter();
-    const { userInfo, loggedIn, logout } = useAuth();
+    const { userInfo, loggedIn, logout, initializeUser } = useAuth();
     const isDropdownOpen = ref(false);
 
     const toggleDropdown = () => {
@@ -57,6 +58,26 @@ export default {
       logout();
       router.push("/");
     };
+
+    const handleClickOutside = (event) => {
+      if (
+        isDropdownOpen.value &&
+        !event.target.closest("#dropdown-menu") &&
+        !event.target.closest("#userDropdown")
+      ) {
+        console.log(event);
+        isDropdownOpen.value = false;
+      }
+    };
+
+    onMounted(() => {
+      initializeUser();
+      document.addEventListener("click", handleClickOutside);
+    });
+
+    onUnmounted(() => {
+      document.removeEventListener("click", handleClickOutside);
+    });
 
     return {
       userInfo,

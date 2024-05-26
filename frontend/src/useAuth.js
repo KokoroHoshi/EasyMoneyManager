@@ -9,9 +9,7 @@ export function useAuth() {
   const generateJWT = (user) => {
     try {
       const userInfoString = JSON.stringify(user);
-      const encoder = new TextEncoder();
-      const userInfoBytes = encoder.encode(userInfoString);
-      const userInfoBase64 = btoa(String.fromCharCode(...userInfoBytes));
+      const userInfoBase64 = btoa(userInfoString);
       return userInfoBase64;
     } catch (error) {
       console.error("Error generating JWT:", error);
@@ -26,19 +24,13 @@ export function useAuth() {
         return null;
       }
 
-      const base64Regex = /^[a-zA-Z0-9-_]+$/;
-      if (!base64Regex.test(jwt)) {
-        console.error("Invalid Base64 string:", jwt);
-        return null;
-      }
-
-      const utf8UserInfoString = atob(jwt);
-      if (!utf8UserInfoString) {
+      const userInfoString = atob(jwt);
+      if (!userInfoString) {
         console.error("Decoded JWT is empty");
         return null;
       }
 
-      const userInfo = JSON.parse(utf8UserInfoString);
+      const userInfo = JSON.parse(userInfoString);
       return userInfo;
     } catch (error) {
       console.error("Error parsing JWT:", error);
@@ -48,13 +40,15 @@ export function useAuth() {
 
   const login = (user) => {
     const jwt = generateJWT(user);
-    cookies.set("user_jwt", jwt, {
-      expire: "1d",
-      secure: true,
-      sameSite: "Strict",
-    });
-    userInfo.value = user;
-    loggedIn.value = true;
+    if (jwt) {
+      cookies.set("user_jwt", jwt, {
+        expire: "1d",
+        secure: true,
+        sameSite: "Strict",
+      });
+      userInfo.value = user;
+      loggedIn.value = true;
+    }
   };
 
   const logout = () => {
@@ -63,12 +57,16 @@ export function useAuth() {
     loggedIn.value = false;
   };
 
-  const initializeUser = async () => {
+  const initializeUser = () => {
     const jwt = cookies.get("user_jwt");
     if (jwt) {
-      const userInfoFromJWT = await getUserInfoFromJWT(jwt);
-      userInfo.value = userInfoFromJWT;
-      loggedIn.value = true;
+      const userInfoFromJWT = getUserInfoFromJWT(jwt);
+      if (userInfoFromJWT) {
+        userInfo.value = userInfoFromJWT;
+        loggedIn.value = true;
+      } else {
+        logout(); // 如果解析失败，清除无效的 JWT
+      }
     }
   };
 

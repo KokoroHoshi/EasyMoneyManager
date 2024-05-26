@@ -2,11 +2,13 @@
   <div class="d-flex justify-content-center align-items-center min-vh-100">
     <div v-if="loggedIn">
       <div>
-        <h2>{{ userInfo.name }}</h2>
-        <h2>{{ userInfo.email }}</h2>
-        <h2>{{ userInfo.sub }}</h2>
+        <h1>{{ userInfo.name }}</h1>
+        <h3>Log out or continue?</h3>
       </div>
-      <button class="btn btn-danger" @click="logout">Logout</button>
+      <div class="d-flex justify-content-between w-100 mt-3">
+        <button class="btn btn-danger" @click="logout">Logout</button>
+        <button class="btn btn-primary" @click="redirect">Continue</button>
+      </div>
     </div>
     <div v-else>
       <GoogleLogin :callback="callback" />
@@ -34,13 +36,6 @@ export default {
     onMounted(() => {
       initializeUser();
     });
-    // onMounted(() => {
-    //   initializeUser()
-    //     .then(() => {})
-    //     .catch((error) => {
-    //       console.error("Error initializing user:", error);
-    //     });
-    // });
 
     return {
       userInfo,
@@ -49,6 +44,9 @@ export default {
       logout: () => {
         googleLogout();
         logout();
+      },
+      redirect: () => {
+        router.push("/record");
       },
     };
   },
