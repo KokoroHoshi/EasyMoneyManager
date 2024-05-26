@@ -65,7 +65,7 @@ export function useAuth() {
         userInfo.value = userInfoFromJWT;
         loggedIn.value = true;
       } else {
-        logout(); // 如果解析失败，清除无效的 JWT
+        logout();
       }
     }
   };

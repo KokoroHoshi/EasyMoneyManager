@@ -138,22 +138,35 @@ export default {
 
       const payload = {
         userId: this.userInfo.sub,
-        type: this.localRecord.type,
-        name: this.localRecord.name,
-        amount: this.localRecord.amount,
-        tags: this.localRecord.selectedTags,
-        date: this.localRecord.date,
+        records: [
+          {
+            name: this.localRecord.name,
+            amount: this.localRecord.amount,
+            tags: this.localRecord.selectedTags,
+            type: this.localRecord.type,
+            date: this.localRecord.date,
+          },
+        ],
       };
 
-      axios
+      const url = this.localRecord.record_id
+        ? `http://localhost:5000/api/update/record/${this.userInfo.sub}/${this.localRecord.record_id}`
+        : "http://localhost:5000/api/add/record";
+
+      const method = this.localRecord.record_id ? "put" : "post";
+
+      axios[method](
+        url,
+        this.localRecord.record_id ? { record: payload.records[0] } : payload
+      )
         .post("http://localhost:5000/api/post/record", payload)
         .then((response) => {
           console.log("Data saved:", response.data);
           console.log(payload);
 
-          toast(`${payload.name} $ ${payload.amount}`, {
+          toast(`${payload.records[0].name} $ ${payload.records[0].amount}`, {
             theme: "colored",
-            type: payload.type === "income" ? "success" : "error",
+            type: payload.records[0].type === "income" ? "success" : "error",
             position: "top-center",
             pauseOnFocusLoss: false,
             dangerouslyHTMLString: true,
@@ -164,7 +177,6 @@ export default {
         });
 
       if (this.$route.name === "RecordPage") {
-        // this.$router.push({ name: "RecordPage" });
         this.cleanForm();
       } else if (this.$route.name === "EditPage") {
         this.$router.push({ name: "HistoryPage" });
