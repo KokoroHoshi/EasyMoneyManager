@@ -57,10 +57,18 @@
 </template>
 
 <script>
+import { useAuth } from "@/useAuth";
 import axios from "axios";
 import { toast } from "vue3-toastify";
 
 export default {
+  setup() {
+    const { userInfo } = useAuth();
+
+    return {
+      userInfo,
+    };
+  },
   props: {
     record: {
       type: Object,
@@ -129,6 +137,7 @@ export default {
       this.localRecord.date = new Date().toISOString();
 
       const payload = {
+        userId: this.userInfo.sub,
         type: this.localRecord.type,
         name: this.localRecord.name,
         amount: this.localRecord.amount,

@@ -71,6 +71,7 @@ def add_record():
     datetime_format = '%Y-%m-%dT%H:%M:%S.%fZ'
 
     data = request.get_json()
+    user_id = data['userId']
     name = data['name']
     amount = data['amount']
     tags = ','.join(data['tags'])

@@ -3,8 +3,13 @@ import RecordPage from "../views/RecordPage.vue";
 import InvestmentPage from "../views/InvestmentPage.vue";
 import HistoryPage from "../views/HistoryPage.vue";
 import EditPage from "../views/EditPage.vue";
+import LoginPage from "@/views/LoginPage.vue";
 
 const routes = [
+  {
+    path: "/",
+    component: LoginPage,
+  },
   {
     path: "/record",
     name: "RecordPage",
