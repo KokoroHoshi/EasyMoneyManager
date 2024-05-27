@@ -31,8 +31,14 @@ def update_record_route(user_id, record_id):
     update_record(user_id, record_id, record)
     return jsonify({'status': 'success'}), 200
 
-@app.route('/api/get/record/<user_id>/<record_id>', methods=['GET'])
-def get_record_route(user_id, record_id):
+@app.route('/api/get/record', methods=['GET'])
+def get_record_route():
+    user_id = request.args.get('user_id')
+    record_id = request.args.get('record_id')
+
+    if not user_id or not record_id:
+        return jsonify({'status': 'error', 'message': 'Missing user_id or record_id'}), 400
+
     record = get_record(user_id, record_id)
     if record:
         return jsonify({'status': 'success', 'record': record}), 200
@@ -46,61 +52,6 @@ def get_records_route(user_id, date):
         return jsonify({'status': 'success', 'records': records}), 200
     except Exception as e:
         return jsonify({'status': 'failure', 'message': str(e)}), 400
-
-# @app.route('/api/get/record', methods=['GET'])
-# def get_record_by_rid():
-#     rid = request.args.get('rid')
-
-#     print(rid)
-
-#     if not rid:
-#         return jsonify({"error": "Record ID is required"}), 400
-
-#     # fetch data from database with rid
-
-#     record = {
-#         "rid": "001",
-#         "date": "2024-05-19",
-#         "name" : "cake",
-#         "amount": 360,
-#         "tags": ["Food", "Gift", "i don't know"],
-#         "type": "expense"
-#     }
-    
-#     return jsonify(record)
-
-# @app.route('/api/get/all_records', methods=['GET'])
-# def get_all_records():
-#     # fetch data from database
-
-#     records = [
-#         {
-#           "rid": "001",
-#           "date": "2024-05-19",
-#           "name": "cake",
-#           "amount": 360,
-#           "tags": ["Food", "Gift", "i don't know"],
-#           "type": "expense",
-#         },
-#         {
-#           "rid": "002",
-#           "date": "2024-05-20",
-#           "name": "dinner",
-#           "amount": 100,
-#           "tags": ["Food"],
-#           "type": "expense",
-#         },
-#         {
-#           "rid": "003",
-#           "date": "2024-05-21",
-#           "name": "t-shirt",
-#           "amount": 399,
-#           "tags": ["Clothing"],
-#           "type": "income",
-#         },
-#       ]
-    
-#     return jsonify(records)
 
 @app.route('/api/get/stock_info', methods=['GET'])
 def get_stock_info_by_id_route():

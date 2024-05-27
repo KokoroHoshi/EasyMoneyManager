@@ -36,13 +36,17 @@ export default {
     record: {
       type: Object,
       required: true,
+      default: () => ({}), // 添加這一行，確保record有默認值
     },
   },
   methods: {
     navigateToEdit() {
       // alert("You clicked on: " + this.record.name);
-      console.log(this.record.rid);
-      this.$router.push({ name: "EditPage", query: { rid: this.record.rid } });
+      // console.log(this.record.record_id);
+      this.$router.push({
+        name: "EditPage",
+        query: { record_id: this.record.record_id },
+      });
     },
   },
 };

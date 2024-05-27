@@ -12,22 +12,25 @@
 import TitleBar from "@/components/TitleBar.vue";
 import BottomNavbar from "@/components/BottomNavbar.vue";
 import RecordCard from "@/components/RecordCard.vue";
-
 import axios from "axios";
+import { useAuth } from "@/useAuth";
 
 export default {
+  setup() {
+    const { userInfo } = useAuth();
+    return {
+      userInfo,
+    };
+  },
   components: {
     TitleBar,
     BottomNavbar,
     RecordCard,
   },
-  created() {
-    this.getRecord();
-  },
   data() {
     return {
       record: {
-        rid: "",
+        record_id: "",
         name: "",
         amount: 0,
         tags: [],
@@ -36,25 +39,37 @@ export default {
       },
     };
   },
+  created() {
+    this.getRecord();
+  },
   methods: {
     getRecord() {
-      const recordId = this.$route.query.rid;
+      const recordId = this.$route.query.record_id;
       if (!recordId) {
         console.error("Record ID is missing");
         return;
       }
-      console.log(recordId);
-      const path = `http://localhost:5000/api/get/record?rid=${recordId}`;
+      const path = `http://localhost:5000/api/get/record?user_id=${this.userInfo.sub}&record_id=${recordId}`;
       axios
         .get(path)
         .then((res) => {
           console.log(res.data);
-          this.record = res.data;
+          if (res.data.status === "success") {
+            this.record = res.data.record;
+          } else {
+            console.error("Record not found");
+          }
         })
         .catch((err) => {
-          console.log(err);
+          console.error("Error fetching record:", err);
         });
     },
   },
 };
 </script>
+
+<style scoped>
+.container {
+  margin: 1rem;
+}
+</style>

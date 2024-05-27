@@ -30,12 +30,10 @@ def update_record(user_id, record_id, record):
     db.collection('users').document(user_id).collection('records').document(record_id).set(record_data)
 
 def get_record(user_id, record_id):
-    doc_ref = db.collection('users').document(user_id).collection('records').document(record_id)
-    doc = doc_ref.get()
-    if doc.exists:
-        record = doc.to_dict()
-        record['record_id'] = doc.id
-        return record
+    record_ref = db.collection('users').document(user_id).collection('records').document(record_id)
+    record = record_ref.get()
+    if record.exists:
+        return record.to_dict()
     else:
         return None
 
