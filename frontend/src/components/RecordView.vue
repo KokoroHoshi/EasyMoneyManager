@@ -17,7 +17,7 @@
         <dt class="col-sm-3">Tags</dt>
         <dd class="col-sm-9">
           <div class="d-flex flex-wrap">
-            <div class="me-3" v-for="(tag, index) in record.tags" :key="index">
+            <div class="me-3" v-for="(tag, index) in tagsArray" :key="index">
               <label>{{ tag }}</label>
             </div>
           </div>
@@ -36,13 +36,16 @@ export default {
     record: {
       type: Object,
       required: true,
-      default: () => ({}), // 添加這一行，確保record有默認值
+      default: () => ({}), // 確保record有默認值
+    },
+  },
+  computed: {
+    tagsArray() {
+      return this.record.tags ? this.record.tags.split(",") : [];
     },
   },
   methods: {
     navigateToEdit() {
-      // alert("You clicked on: " + this.record.name);
-      // console.log(this.record.record_id);
       this.$router.push({
         name: "EditPage",
         query: { record_id: this.record.record_id },
