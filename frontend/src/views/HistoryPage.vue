@@ -58,7 +58,6 @@ export default {
       axios
         .get(`http://localhost:5000/api/get/records/${userId}/${date}`)
         .then((res) => {
-          console.log("Records fetched:", res.data.records);
           this.records = res.data.records;
         })
         .catch((err) => {

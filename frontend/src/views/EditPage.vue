@@ -53,12 +53,11 @@ export default {
       axios
         .get(path)
         .then((res) => {
-          console.log(res.data);
           if (res.data.status === "success") {
             const record = res.data.record;
             record.tags = record.tags ? record.tags.split(",") : [];
-            console.log(record.tags);
             this.record = record;
+            this.record.record_id = recordId;
           } else {
             console.error("Record not found");
           }

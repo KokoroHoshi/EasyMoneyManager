@@ -19,16 +19,27 @@ def add_record_route():
     user_id = data['userId']
     records = data['records']
 
+    if not user_id or not records:
+        return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
+
     for record in records:
         add_record(user_id, record)
 
     return jsonify({'status': 'success'}), 200
 
-@app.route('/api/update/record/<user_id>/<record_id>', methods=['PUT'])
-def update_record_route(user_id, record_id):
-    data = request.json
-    record = data['record']
+@app.route('/api/update/record', methods=['PUT'])
+def update_record_route():
+    data = request.get_json()
+
+    user_id = data.get('userId')
+    record_id = data.get('record_id')
+    record = data.get('record')
+
+    if not user_id or not record_id or not record:
+        return jsonify({'status': 'error', 'message': 'Invalid data'}), 400
+
     update_record(user_id, record_id, record)
+
     return jsonify({'status': 'success'}), 200
 
 @app.route('/api/get/record', methods=['GET'])

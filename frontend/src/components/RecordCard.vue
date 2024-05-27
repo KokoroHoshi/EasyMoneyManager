@@ -92,6 +92,7 @@ export default {
         "Entertainment",
       ],
       localRecord: {
+        record_id: "",
         name: "",
         amount: 0,
         selectedTags: [],
@@ -149,15 +150,23 @@ export default {
         ],
       };
 
+      this.localRecord.record_id = this.$route.query.record_id;
+
       const url = this.localRecord.record_id
-        ? `http://localhost:5000/api/update/record/${this.userInfo.sub}/${this.localRecord.record_id}`
+        ? `http://localhost:5000/api/update/record`
         : "http://localhost:5000/api/add/record";
 
       const method = this.localRecord.record_id ? "put" : "post";
 
       axios[method](
         url,
-        this.localRecord.record_id ? { record: payload.records[0] } : payload
+        this.localRecord.record_id
+          ? {
+              userId: this.userInfo.sub,
+              record_id: this.localRecord.record_id,
+              record: payload.records[0],
+            }
+          : payload
       )
         .then((res) => {
           console.log("Data saved:", res.data);
