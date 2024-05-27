@@ -42,6 +42,9 @@ export default {
       records: [],
     };
   },
+  mounted() {
+    this.getRecordsByDate();
+  },
   methods: {
     getRecordsByDate(date) {
       if (!date) {

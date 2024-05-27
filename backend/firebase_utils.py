@@ -25,7 +25,7 @@ def update_record(user_id, record_id, record):
         'amount': record['amount'],
         'tags': ','.join(record['tags']),
         'type': record['type'],
-        'date': datetime.strptime(record['date'], datetime_format)
+        'date': record['date']
     }
     db.collection('users').document(user_id).collection('records').document(record_id).set(record_data)
 
@@ -39,12 +39,16 @@ def get_record(user_id, record_id):
     else:
         return None
 
-def get_all_records_by_date(user_id, date):
+def get_records_by_date(user_id, date):
     start_date = datetime.strptime(date, "%Y-%m-%d")
     end_date = start_date + timedelta(days=1)
     
+    start_date_str = start_date.isoformat()
+    end_date_str = end_date.isoformat()
+    
     records_ref = db.collection('users').document(user_id).collection('records')
-    query = records_ref.where('date', '>=', start_date).where('date', '<', end_date)
+    
+    query = records_ref.where('date', '>=', start_date_str).where('date', '<', end_date_str)
     results = query.stream()
 
     records = []

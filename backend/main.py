@@ -42,14 +42,14 @@ def get_record_route(user_id, record_id):
 @app.route('/api/get/records/<user_id>/<date>', methods=['GET'])
 def get_records_route(user_id, date):
     try:
-        records = get_all_records_by_date(user_id, date)
+        records = get_records_by_date(user_id, date)
         return jsonify({'status': 'success', 'records': records}), 200
     except Exception as e:
         return jsonify({'status': 'failure', 'message': str(e)}), 400
 
-@app.route('/api/get/record', methods=['GET'])
-def get_record_by_rid():
-    rid = request.args.get('rid')
+# @app.route('/api/get/record', methods=['GET'])
+# def get_record_by_rid():
+#     rid = request.args.get('rid')
 
 #     print(rid)
 
