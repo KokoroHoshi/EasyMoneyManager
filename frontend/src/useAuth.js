@@ -6,10 +6,28 @@ const userInfo = ref({});
 const loggedIn = ref(false);
 
 export function useAuth() {
+  const encodeBase64 = (str) => {
+    try {
+      return btoa(unescape(encodeURIComponent(str)));
+    } catch (error) {
+      console.error("Error encoding Base64:", error);
+      return null;
+    }
+  };
+
+  const decodeBase64 = (str) => {
+    try {
+      return decodeURIComponent(escape(atob(str)));
+    } catch (error) {
+      console.error("Error decoding Base64:", error);
+      return null;
+    }
+  };
+
   const generateJWT = (user) => {
     try {
       const userInfoString = JSON.stringify(user);
-      const userInfoBase64 = btoa(userInfoString);
+      const userInfoBase64 = encodeBase64(userInfoString);
       return userInfoBase64;
     } catch (error) {
       console.error("Error generating JWT:", error);
@@ -24,7 +42,7 @@ export function useAuth() {
         return null;
       }
 
-      const userInfoString = atob(jwt);
+      const userInfoString = decodeBase64(jwt);
       if (!userInfoString) {
         console.error("Decoded JWT is empty");
         return null;
