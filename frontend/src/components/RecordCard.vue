@@ -134,6 +134,11 @@ export default {
       }
     },
     submit(type) {
+      if (!this.localRecord.amount || isNaN(this.localRecord.amount)) {
+        alert("Please enter a valid number for the amount.");
+        return;
+      }
+
       this.localRecord.type = type;
       this.localRecord.date = new Date().toISOString();
 
