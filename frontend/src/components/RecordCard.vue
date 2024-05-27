@@ -159,9 +159,8 @@ export default {
         url,
         this.localRecord.record_id ? { record: payload.records[0] } : payload
       )
-        .post("http://localhost:5000/api/post/record", payload)
-        .then((response) => {
-          console.log("Data saved:", response.data);
+        .then((res) => {
+          console.log("Data saved:", res.data);
           console.log(payload);
 
           toast(`${payload.records[0].name} $ ${payload.records[0].amount}`, {
@@ -172,8 +171,8 @@ export default {
             dangerouslyHTMLString: true,
           });
         })
-        .catch((error) => {
-          console.error("Error saving data:", error);
+        .catch((err) => {
+          console.error("Error saving data:", err);
         });
 
       if (this.$route.name === "RecordPage") {

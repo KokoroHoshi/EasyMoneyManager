@@ -2,19 +2,19 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from datetime import datetime, timedelta
 
-cred = credentials.Certificate('firebaseServiceAccountKey.json')
+cred = credentials.Certificate('./firebaseServiceAccountKey.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-datetime_format = "%Y-%m-%dT%H:%M:%S"
-
 def add_record(user_id, record):
+    parsed_date = datetime.fromisoformat(record['date'].replace('Z', '+00:00')).isoformat()
+
     record_data = {
         'name': record['name'],
         'amount': record['amount'],
         'tags': ','.join(record['tags']),
         'type': record['type'],
-        'date': datetime.strptime(record['date'], datetime_format)
+        'date': parsed_date
     }
 
     db.collection('users').document(user_id).collection('records').add(record_data)

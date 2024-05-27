@@ -57,7 +57,12 @@ export default {
       ];
     },
     daysInMonth() {
-      return new Date(this.selectedYear, this.selectedMonth, 0).getDate();
+      return Array.from(
+        {
+          length: new Date(this.selectedYear, this.selectedMonth, 0).getDate(),
+        },
+        (_, i) => i + 1
+      );
     },
   },
   methods: {
@@ -71,12 +76,10 @@ export default {
         this.selectedDay = daysInSelectedMonth;
       }
 
-      const selectedDate = new Date(
-        this.selectedYear,
-        this.selectedMonth - 1,
-        this.selectedDay
-      );
-      alert(`Selected Date: ${selectedDate.toDateString()}`);
+      const selectedDate = `${this.selectedYear}-${String(
+        this.selectedMonth
+      ).padStart(2, "0")}-${String(this.selectedDay).padStart(2, "0")}`;
+      this.$emit("date-selected", selectedDate);
     },
   },
 };
