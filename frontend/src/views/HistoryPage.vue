@@ -24,6 +24,9 @@ import axios from "axios";
 import { useAuth } from "@/useAuth";
 
 export default {
+  beforeRouteUpdate() {
+    this.getRecordsByDate();
+  },
   setup() {
     const { userInfo } = useAuth();
 
