@@ -134,7 +134,10 @@ export default {
       }
     },
     submit(type) {
-      if (!this.localRecord.amount || isNaN(this.localRecord.amount)) {
+      if (
+        (!this.localRecord.amount && this.localRecord.amount !== 0) ||
+        isNaN(this.localRecord.amount)
+      ) {
         alert("Please enter a valid number for the amount.");
         return;
       }
