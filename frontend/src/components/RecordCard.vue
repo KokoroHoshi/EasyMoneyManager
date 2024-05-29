@@ -45,6 +45,17 @@
       <button class="btn btn-primary btn-sm" @click="addTag">+</button>
     </div>
 
+    <div v-if="localRecord.record_id" class="mb-3">
+      <label for="dateInput" class="form-label">Date</label>
+      <input
+        type="datetime-local"
+        id="dateInput"
+        class="form-control"
+        v-model="formattedDate"
+        @input="updateLocalRecordDate"
+      />
+    </div>
+
     <div class="mx-auto">
       <button class="btn btn-danger me-2" @click="submit('expense')">
         expense
@@ -99,6 +110,7 @@ export default {
         type: "",
         date: "",
       },
+      formattedDate: "",
     };
   },
   computed: {
@@ -113,6 +125,7 @@ export default {
       immediate: true,
       handler(newRecord) {
         this.localRecord = { ...newRecord, selectedTags: [...newRecord.tags] };
+        this.formattedDate = this.formatDateForInput(newRecord.date); // Format date for input
       },
     },
     "localRecord.selectedTags": {
@@ -127,6 +140,19 @@ export default {
     },
   },
   methods: {
+    formatDateForInput(dateString) {
+      if (!dateString) return "";
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    },
+    updateLocalRecordDate(event) {
+      this.localRecord.date = event.target.value;
+    },
     addTag() {
       const newTag = prompt("Input new tag:");
       if (newTag && !this.defaultTags.includes(newTag)) {
@@ -143,7 +169,11 @@ export default {
       }
 
       this.localRecord.type = type;
-      this.localRecord.date = new Date().toISOString();
+
+      if (!this.localRecord.record_id) {
+        const now = new Date();
+        this.localRecord.date = now.toISOString().slice(0, 16);
+      }
 
       const payload = {
         userId: this.userInfo.sub,
@@ -206,6 +236,7 @@ export default {
         type: "",
         date: "",
       };
+      this.formattedDate = "";
     },
   },
 };

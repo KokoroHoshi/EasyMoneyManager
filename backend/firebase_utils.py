@@ -28,6 +28,24 @@ def get_record(user_id, record_id):
         return None
 
 def update_record(user_id, record_id, record):
+    # Fetch existing record to compare dates
+    existing_record_ref = db.collection('users').document(user_id).collection('records').document(record_id)
+    existing_record = existing_record_ref.get()
+    
+    if existing_record.exists:
+        existing_date = existing_record.to_dict().get('date')
+        if existing_date:
+            # Parse both dates to compare up to minute precision
+            existing_date_parsed = datetime.fromisoformat(existing_date.replace('Z', '+00:00')).isoformat(timespec='minutes')
+            new_date_parsed = datetime.fromisoformat(record['date'].replace('Z', '+00:00')).isoformat(timespec='minutes')
+            
+            # If dates are the same up to minutes, keep existing full precision date
+            if existing_date_parsed == new_date_parsed:
+                record['date'] = existing_date
+            else:
+                # Otherwise, ensure new date has full precision
+                record['date'] = datetime.fromisoformat(record['date'].replace('Z', '+00:00')).isoformat()
+    
     record_data = {
         'name': record['name'],
         'amount': record['amount'],
@@ -35,7 +53,8 @@ def update_record(user_id, record_id, record):
         'type': record['type'],
         'date': record['date']
     }
-    db.collection('users').document(user_id).collection('records').document(record_id).set(record_data)
+
+    existing_record_ref.set(record_data)
 
 def delete_record(user_id, record_id):
     record_ref = db.collection('users').document(user_id).collection('records').document(record_id)

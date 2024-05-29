@@ -14,7 +14,7 @@
           Delete
         </button>
       </div>
-      <p class="card-text">Date: {{ record.date }}</p>
+      <p class="card-text">Date: {{ formattedDate }}</p>
       <dl class="row">
         <dt class="col-sm-3">Amount</dt>
         <dd class="col-sm-9">$ {{ record.amount }}</dd>
@@ -58,6 +58,16 @@ export default {
   computed: {
     tagsArray() {
       return this.record.tags ? this.record.tags.split(",") : [];
+    },
+    formattedDate() {
+      if (!this.record.date) return "";
+      const date = new Date(this.record.date);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      return `${year}-${month}-${day} ${hours}:${minutes}`;
     },
   },
   methods: {
