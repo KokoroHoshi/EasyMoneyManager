@@ -8,7 +8,7 @@
       v-for="(record, index) in records"
       :key="index"
     >
-      <RecordView :record="record" />
+      <RecordView :record="record" @recordDeleted="removeRecord" />
     </div>
   </div>
 
@@ -63,6 +63,11 @@ export default {
         .catch((err) => {
           console.error("Error fetching records:", err);
         });
+    },
+    removeRecord(recordId) {
+      this.records = this.records.filter(
+        (record) => record.record_id !== recordId
+      );
     },
   },
 };

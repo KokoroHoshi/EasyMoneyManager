@@ -1,5 +1,5 @@
 <template>
-  <TitleBar title="Record" />
+  <TitleBar title="Edit" />
 
   <div class="container">
     <RecordCard :record="record" />

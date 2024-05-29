@@ -8,7 +8,12 @@
     @click="navigateToEdit"
   >
     <div class="card-body">
-      <h5 class="card-title">{{ record.name }}</h5>
+      <div class="d-flex justify-content-between align-items-start">
+        <h5 class="card-title">{{ record.name }}</h5>
+        <button class="btn btn-warning btn-sm" @click.stop="confirmDelete">
+          Delete
+        </button>
+      </div>
       <p class="card-text">Date: {{ record.date }}</p>
       <dl class="row">
         <dt class="col-sm-3">Amount</dt>
@@ -31,12 +36,23 @@
 </template>
 
 <script>
+import axios from "axios";
+import { toast } from "vue3-toastify";
+import { useAuth } from "@/useAuth";
+
 export default {
+  setup() {
+    const { userInfo } = useAuth();
+
+    return {
+      userInfo,
+    };
+  },
   props: {
     record: {
       type: Object,
       required: true,
-      default: () => ({}), // 確保record有默認值
+      default: () => ({}),
     },
   },
   computed: {
@@ -50,6 +66,29 @@ export default {
         name: "EditPage",
         query: { record_id: this.record.record_id },
       });
+    },
+    confirmDelete() {
+      if (confirm("Are you sure you want to delete this record?")) {
+        this.deleteRecord();
+      }
+    },
+    deleteRecord() {
+      const payload = {
+        userId: this.userInfo.sub,
+        record_id: this.record.record_id,
+      };
+
+      axios
+        .delete("http://localhost:5000/api/delete/record", { data: payload })
+        .then((response) => {
+          console.log("Record deleted:", response.data);
+          toast("Record deleted successfully", { type: "success" });
+          this.$emit("recordDeleted", this.record.record_id);
+        })
+        .catch((error) => {
+          console.error("Error deleting record:", error);
+          toast("Error deleting record", { type: "error" });
+        });
     },
   },
 };
