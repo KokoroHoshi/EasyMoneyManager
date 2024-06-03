@@ -159,7 +159,7 @@ export default {
         this.defaultTags.push(newTag);
       }
     },
-    submit(type) {
+    async submit(type) {
       if (
         (!this.localRecord.amount && this.localRecord.amount !== 0) ||
         isNaN(this.localRecord.amount)
@@ -196,7 +196,7 @@ export default {
 
       const method = this.localRecord.record_id ? "put" : "post";
 
-      axios[method](
+      await axios[method](
         url,
         this.localRecord.record_id
           ? {
@@ -206,10 +206,7 @@ export default {
             }
           : payload
       )
-        .then((res) => {
-          console.log("Data saved:", res.data);
-          console.log(payload);
-
+        .then(() => {
           toast(`${payload.records[0].name} $ ${payload.records[0].amount}`, {
             theme: "colored",
             type: payload.records[0].type === "income" ? "success" : "error",

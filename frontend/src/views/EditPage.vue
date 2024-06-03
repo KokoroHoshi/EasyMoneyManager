@@ -14,50 +14,37 @@ import BottomNavbar from "@/components/BottomNavbar.vue";
 import RecordCard from "@/components/RecordCard.vue";
 import axios from "axios";
 import { useAuth } from "@/useAuth";
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
 
 export default {
   setup() {
+    const route = useRoute();
     const { userInfo } = useAuth();
-    return {
-      userInfo,
-    };
-  },
-  components: {
-    TitleBar,
-    BottomNavbar,
-    RecordCard,
-  },
-  data() {
-    return {
-      record: {
-        record_id: "",
-        name: "",
-        amount: 0,
-        tags: [],
-        type: "",
-        date: "",
-      },
-    };
-  },
-  created() {
-    this.getRecord();
-  },
-  methods: {
-    getRecord() {
-      const recordId = this.$route.query.record_id;
+    const record = ref({
+      record_id: "",
+      name: "",
+      amount: 0,
+      tags: [],
+      type: "",
+      date: "",
+    });
+
+    const getRecord = () => {
+      const recordId = route.query.record_id;
       if (!recordId) {
         console.error("Record ID is missing");
         return;
       }
-      const path = `http://localhost:5000/api/get/record?user_id=${this.userInfo.sub}&record_id=${recordId}`;
+      const path = `http://localhost:5000/api/get/record?user_id=${userInfo.value?.sub}&record_id=${recordId}`;
       axios
         .get(path)
         .then((res) => {
           if (res.data.status === "success") {
-            const record = res.data.record;
-            record.tags = record.tags ? record.tags.split(",") : [];
-            this.record = record;
-            this.record.record_id = recordId;
+            const recordData = res.data.record;
+            recordData.tags = recordData.tags ? recordData.tags.split(",") : [];
+            record.value = recordData;
+            record.value.record_id = recordId;
           } else {
             console.error("Record not found");
           }
@@ -65,7 +52,22 @@ export default {
         .catch((err) => {
           console.error("Error fetching record:", err);
         });
-    },
+    };
+
+    onMounted(() => {
+      getRecord();
+    });
+
+    return {
+      userInfo,
+      record,
+      getRecord,
+    };
+  },
+  components: {
+    TitleBar,
+    BottomNavbar,
+    RecordCard,
   },
 };
 </script>
