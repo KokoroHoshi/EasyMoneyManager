@@ -2,7 +2,7 @@
   <TitleBar title="Record" />
 
   <div class="container">
-    <RecordCard :record="emptyRecord" />
+    <RecordCard :record="emptyRecord" class="record-card" />
   </div>
 
   <BottomNavbar />
@@ -32,3 +32,19 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+/* Form Styling */
+.record-card {
+  background-color: #d8c2b1;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 2px 1px 4px #6e6c6c;
+}
+.container {
+  margin-left: 15%;
+  margin-top: 10%;
+  font-size: 24px;
+  font-weight: bolder;
+}
+</style>
