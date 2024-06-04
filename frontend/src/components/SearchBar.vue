@@ -35,6 +35,9 @@ export default {
 
 <style scoped>
 .search-bar {
+  margin-top: 5rem;
   margin-bottom: 1rem;
+  font-weight: bolder;
+  font-size: 26px;
 }
 </style>
