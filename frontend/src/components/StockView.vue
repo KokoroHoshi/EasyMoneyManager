@@ -174,7 +174,7 @@ export default {
 }
 .no-data {
   border: 2px dashed #ccc;
-  padding: 20px;
+  padding: 30px 20px;
   text-align: center;
   color: #777;
 }
