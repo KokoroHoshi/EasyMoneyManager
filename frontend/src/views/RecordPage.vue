@@ -42,8 +42,10 @@ export default {
   box-shadow: 2px 1px 4px #6e6c6c;
 }
 .container {
-  margin-left: 15%;
-  margin-top: 10%;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   font-size: 24px;
   font-weight: bolder;
 }
