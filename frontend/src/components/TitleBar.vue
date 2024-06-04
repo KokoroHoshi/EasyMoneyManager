@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between"
+    class="navbar navbar-expand-lg navbar-light bg-dark d-flex justify-content-between"
   >
     <h1 class="ms-3">{{ title }}</h1>
     <div v-if="loggedIn" class="dropdown me-3">
@@ -115,5 +115,13 @@ export default {
 .dropdown-item:hover {
   background-color: gray;
   color: white;
+}
+
+h1 {
+  color: white;
+  padding-left: 50px;
+  font-weight: bolder;
+  margin: auto;
+  text-shadow: rgb(189, 188, 188) 0.05em 0.05em 0.05em;
 }
 </style>
