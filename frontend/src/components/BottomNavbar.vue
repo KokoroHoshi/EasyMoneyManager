@@ -41,7 +41,8 @@ export default {
 <style scoped>
 .nav-link {
   font-size: 20px;
-  margin-left: 4rem;
+  margin-right: 2rem;
+  margin-left: 2rem;
   display: flex;
   align-items: center;
   text-align: center;
@@ -54,6 +55,8 @@ export default {
 
 .navbar {
   padding: 0;
+  justify-content: center;
+  display: flex;
 }
 
 li {
