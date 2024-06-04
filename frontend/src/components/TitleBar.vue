@@ -118,7 +118,7 @@ export default {
 }
 h1 {
   color: white;
-  padding-left: 50px;
+  padding-left: 4.2rem;
   font-weight: bolder;
   margin: auto;
   text-shadow: rgb(188, 188, 188) 0.05em 0.05em 0.05em;
