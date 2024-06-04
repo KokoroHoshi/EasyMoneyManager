@@ -37,3 +37,27 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.nav-link {
+  font-size: 20px;
+  margin-left: 4rem;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  height: 5rem;
+}
+
+.nav-link:hover {
+  background-color: gray;
+}
+
+.navbar {
+  padding: 0;
+}
+
+li {
+  height: 5rem;
+  font-weight: bolder;
+}
+</style>
