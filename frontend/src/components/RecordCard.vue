@@ -1,7 +1,7 @@
 <template>
   <div class="card p-3">
     <div class="mb-3">
-      <label for="nameInput" class="form-label">name</label>
+      <label for="nameInput" class="form-label">Name</label>
       <input
         type="text"
         id="nameInput"
@@ -11,7 +11,7 @@
     </div>
 
     <div class="mb-3">
-      <label for="amountInput" class="form-label">amount</label>
+      <label for="amountInput" class="form-label">Amount</label>
       <input
         type="number"
         min="0"
@@ -22,7 +22,7 @@
     </div>
 
     <div class="mb-0">
-      <label class="form-label">tags</label>
+      <label class="form-label">Tags</label>
     </div>
 
     <div class="mb-3 d-flex flex-wrap">
