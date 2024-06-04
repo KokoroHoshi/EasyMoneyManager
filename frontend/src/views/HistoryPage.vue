@@ -22,34 +22,19 @@ import TimeSelector from "@/components/TimeSelector.vue";
 import RecordView from "@/components/RecordView.vue";
 import axios from "axios";
 import { useAuth } from "@/useAuth";
+import { ref, onMounted } from "vue";
 
 export default {
-  beforeRouteUpdate() {
-    this.getRecordsByDate();
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.getRecordsByDate();
+    });
   },
   setup() {
     const { userInfo } = useAuth();
+    const records = ref([]);
 
-    return {
-      userInfo,
-    };
-  },
-  components: {
-    TitleBar,
-    BottomNavbar,
-    TimeSelector,
-    RecordView,
-  },
-  data() {
-    return {
-      records: [],
-    };
-  },
-  created() {
-    this.getRecordsByDate();
-  },
-  methods: {
-    getRecordsByDate(date) {
+    const getRecordsByDate = (date) => {
       if (!date) {
         const today = new Date();
         date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
@@ -57,21 +42,44 @@ export default {
           "0"
         )}-${String(today.getDate()).padStart(2, "0")}`;
       }
-      const userId = this.userInfo.sub;
+      const userId = userInfo.value?.sub;
+      if (!userId) {
+        console.error("User info not available.");
+        return;
+      }
+
       axios
         .get(`http://localhost:5000/api/get/records/${userId}/${date}`)
         .then((res) => {
-          this.records = res.data.records;
+          records.value = res.data.records;
         })
         .catch((err) => {
           console.error("Error fetching records:", err);
         });
-    },
-    removeRecord(recordId) {
-      this.records = this.records.filter(
+    };
+
+    onMounted(() => {
+      getRecordsByDate();
+    });
+
+    const removeRecord = (recordId) => {
+      records.value = records.value.filter(
         (record) => record.record_id !== recordId
       );
-    },
+    };
+
+    return {
+      userInfo,
+      records,
+      getRecordsByDate,
+      removeRecord,
+    };
+  },
+  components: {
+    TitleBar,
+    BottomNavbar,
+    TimeSelector,
+    RecordView,
   },
 };
 </script>

@@ -116,12 +116,11 @@ export default {
   background-color: gray;
   color: white;
 }
-
 h1 {
   color: white;
   padding-left: 50px;
   font-weight: bolder;
   margin: auto;
-  text-shadow: rgb(189, 188, 188) 0.05em 0.05em 0.05em;
+  text-shadow: rgb(188, 188, 188) 0.05em 0.05em 0.05em;
 }
 </style>
