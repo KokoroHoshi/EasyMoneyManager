@@ -78,7 +78,12 @@ export default {
 
 <style scoped>
 .container {
-  margin: 1rem;
+  margin-top: 6%;
+  margin-left: auto;
+  box-shadow: 1px -1px 3px 0px rgb(166, 206, 206);
+  background-color: rgb(182, 209, 209);
+  font-size: 25px;
+  font-weight: bolder;
 }
 .records-container {
   margin-bottom: 1rem;
