@@ -12,6 +12,8 @@
     </div>
   </div>
 
+  <div class="block"></div>
+
   <BottomNavbar />
 </template>
 
@@ -85,8 +87,14 @@ export default {
 </script>
 
 <style scoped>
+.block {
+  margin-top: 100px;
+}
+
 .container {
-  margin-top: 6%;
+  margin-top: 2%;
+  padding-top: 1%;
+  padding-bottom: 1%;
   margin-left: auto;
   box-shadow: 1px -1px 3px 0px rgb(166, 206, 206);
   background-color: rgb(182, 209, 209);

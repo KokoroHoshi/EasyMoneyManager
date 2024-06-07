@@ -1,6 +1,8 @@
 <template>
   <TitleBar title="Record" />
 
+  <div class="block"></div>
+
   <div class="container">
     <RecordCard :record="emptyRecord" class="record-card" />
   </div>
@@ -34,7 +36,10 @@ export default {
 </script>
 
 <style scoped>
-/* Form Styling */
+.block {
+  margin-top: clamp(20px, 3vw, 50px);
+}
+
 .record-card {
   background-color: #d8c2b1;
   padding: 20px;

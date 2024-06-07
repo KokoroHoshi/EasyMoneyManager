@@ -5,6 +5,8 @@
     <StockView />
   </div>
 
+  <div class="block"></div>
+
   <BottomNavbar />
 </template>
 
@@ -26,3 +28,17 @@ export default {
   methods: {},
 };
 </script>
+
+<style scoped>
+.block {
+  margin-top: 100px;
+}
+
+.container {
+  padding-top: 1%;
+  padding-bottom: 1%;
+  margin-left: auto;
+  font-size: 25px;
+  font-weight: bolder;
+}
+</style>
