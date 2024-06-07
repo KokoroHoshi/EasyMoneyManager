@@ -57,10 +57,16 @@
     </div>
 
     <div class="mx-auto">
-      <button class="btn btn-danger me-2" @click="submit('expense')">
+      <button
+        class="btn btn-danger me-2 button-style"
+        @click="submit('expense')"
+      >
         expense
       </button>
-      <button class="btn btn-success me-2" @click="submit('income')">
+      <button
+        class="btn btn-success me-2 button-style"
+        @click="submit('income')"
+      >
         income
       </button>
     </div>
@@ -247,5 +253,12 @@ export default {
   position: relative;
   height: 200px;
   width: 100%;
+}
+
+.button-style {
+  font-size: 20px;
+  font-weight: bold;
+  width: 15rem;
+  height: 3rem;
 }
 </style>
