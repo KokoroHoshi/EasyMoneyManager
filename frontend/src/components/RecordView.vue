@@ -9,8 +9,11 @@
   >
     <div class="card-body">
       <div class="d-flex justify-content-between align-items-start">
-        <h5 class="card-title">{{ record.name }}</h5>
-        <button class="btn btn-warning btn-sm" @click.stop="confirmDelete">
+        <h2 class="card-title">{{ record.name }}</h2>
+        <button
+          class="btn btn-warning btn-sm button-style"
+          @click.stop="confirmDelete"
+        >
           Delete
         </button>
       </div>
@@ -111,5 +114,10 @@ export default {
 }
 .card:hover {
   filter: brightness(90%);
+}
+
+.button-style {
+  font-size: 20px;
+  font-weight: bold;
 }
 </style>
