@@ -41,6 +41,7 @@ export default {
   border-radius: 10px;
   box-shadow: 2px 1px 4px #6e6c6c;
 }
+
 .container {
   position: absolute;
   top: 20rem;

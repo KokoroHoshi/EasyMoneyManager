@@ -2,7 +2,7 @@
   <TitleBar title="Edit" />
 
   <div class="container">
-    <RecordCard :record="record" />
+    <RecordCard :record="record" class="record-card" />
   </div>
 
   <BottomNavbar />
@@ -73,7 +73,19 @@ export default {
 </script>
 
 <style scoped>
+.record-card {
+  background-color: #d8c2b1;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 2px 1px 4px #6e6c6c;
+}
+
 .container {
-  margin: 1rem;
+  position: absolute;
+  top: 20rem;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  font-weight: bolder;
 }
 </style>
