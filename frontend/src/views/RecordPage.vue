@@ -43,7 +43,7 @@ export default {
 }
 .container {
   position: absolute;
-  top: 40%;
+  top: 20rem;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 24px;
