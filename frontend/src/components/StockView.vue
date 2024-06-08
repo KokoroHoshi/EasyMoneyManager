@@ -9,6 +9,7 @@
         </div>
         <div class="mb-3">
           <h5>current price: {{ currentPrice }}</h5>
+          <h5>predicted price: {{ predictedPrice }}</h5>
         </div>
         <div class="mb-3">
           <select
@@ -72,6 +73,7 @@ export default {
       stockId: "",
       stockName: "",
       currentPrice: "",
+      predictedPrice: "",
       timeScales: ["1D", "1W", "1M", "1Y"],
       selectedTimeScale: "1D",
       chartKey: 0, // use this to force the line chart re-render temporary
@@ -105,6 +107,7 @@ export default {
       this.stockId = newSearchQuery;
       this.fetchStockInfo();
       this.fetchStockData();
+      this.getStockPrediction();
     },
   },
   methods: {
@@ -153,6 +156,21 @@ export default {
 
           this.chartData.labels = labels;
           this.chartData.datasets[0].data = datasetData;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getStockPrediction() {
+      const path = `http://localhost:5000/api/get/stock_prediction?stock_id=${this.stockId}`;
+      axios
+        .get(path)
+        .then((res) => {
+          const data = res.data;
+          console.log(data);
+
+          // temporary
+          this.predictedPrice = data["0"];
         })
         .catch((err) => {
           console.log(err);

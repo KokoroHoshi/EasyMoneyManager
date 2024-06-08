@@ -104,7 +104,7 @@ def get_stock_prediction_by_id(stock_id):
             # temporary
             prediction_dict = {}
             for i in range(len(prediction)):
-                prediction_dict[i] = prediction[i]
+                prediction_dict[i] = round(prediction[i], 2)
 
             return prediction_dict
         except ValueError as e:
