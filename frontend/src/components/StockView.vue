@@ -11,7 +11,6 @@
           <h5>current price: {{ currentPrice }}</h5>
         </div>
         <div class="mb-3">
-          <label for="timeScale" class="form-label">Time Scale</label>
           <select
             id="timeScale"
             class="form-select"
@@ -165,7 +164,7 @@ export default {
 
 <style scoped>
 .container {
-  padding-top: 20px;
+  padding-top: 5px;
 }
 .chart-container {
   position: relative;

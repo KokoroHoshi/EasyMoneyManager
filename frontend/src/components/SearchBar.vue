@@ -1,6 +1,6 @@
 <template>
   <div class="search-bar">
-    <label for="search-input" class="form-label">Search:</label>
+    <h5 for="search-input" class="form-label">Search stock price by code:</h5>
     <div class="input-group">
       <input
         type="text"
