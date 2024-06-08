@@ -11,18 +11,33 @@
       </div>
     </div>
     <div v-else>
-      <GoogleLogin :callback="callback" />
+      <div class="page-container">
+        <TitleBar title="Easy Money Manager" />
+        <div class="inner">
+          <div class="inner-content">
+            <GoogleLogin :callback="callback">
+              <button class="btn btn-primary btn-lg">
+                Login Google Account
+              </button>
+            </GoogleLogin>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import TitleBar from "@/components/TitleBar.vue";
 import { onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useAuth } from "@/useAuth";
 import { decodeCredential, googleLogout } from "vue3-google-login";
 
 export default {
+  components: {
+    TitleBar,
+  },
   setup() {
     const router = useRouter();
     const { userInfo, loggedIn, login, logout, initializeUser } = useAuth();
@@ -52,3 +67,28 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.page-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+}
+
+.inner {
+  display: flex;
+  width: 100%;
+  height: 80%;
+  margin-bottom: 20%;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
+
+.inner-content {
+  justify-content: center;
+}
+</style>
