@@ -15,11 +15,7 @@
         <TitleBar title="Easy Money Manager" />
         <div class="inner">
           <div class="inner-content">
-            <GoogleLogin :callback="callback">
-              <button class="btn btn-primary btn-lg">
-                Login Google Account
-              </button>
-            </GoogleLogin>
+            <GoogleLogin :callback="callback" />
           </div>
         </div>
       </div>
