@@ -2,6 +2,10 @@ import twstock
 import yfinance as yf
 from datetime import datetime, timedelta
 
+import joblib
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+
 def check_stock_exist(symbol):
     stock = yf.Ticker(symbol)
     return 'symbol' in stock.info
@@ -81,3 +85,73 @@ def get_stock_data_by_id(stock_id, timescale):
         raise ValueError("Invalid timescale")
   
     return data
+
+def get_stock_data_by_id_for_model(stock_id):
+    found_stock = False
+    for suffix in ['.TW', '.TWO']:
+        symbol = stock_id + suffix
+        if check_stock_exist(symbol):
+            stock = yf.Ticker(symbol)
+            found_stock = True
+            break
+    if not found_stock:
+        return None
+
+    current_time = datetime.now()
+
+    start_time = (current_time - timedelta(days=5)).replace(hour=9, minute=0, second=0)
+
+    data = stock.history(start=start_time.strftime('%Y-%m-%d'), interval='1m')
+
+    if data.empty:
+        print("No data fetched.")
+        return None
+
+    data = data['Close'].tolist()
+
+    # Pad the prices with the last known price to reach 384 points
+    if len(data) < 384:
+        data = data + [data[-1]] * (384 - len(data))
+    else:
+        data = data[-384:]
+
+    return data
+
+def load_model(model_path):
+    return joblib.load(model_path)
+
+def predict(model, x):
+    print(x.shape)
+    if len(x) != 384:
+        raise ValueError("Input shape must be (384,)")
+    y_hat = model.predict([x])  # model.predict expects 2D array
+    # print(f"Model raw output: {y_hat}") 
+    return y_hat[96:]
+
+def normalize_data(data):
+    scaler = MinMaxScaler()
+    data = np.array(data).reshape(-1, 1)
+    normalized_data = scaler.fit_transform(data)
+    return normalized_data.flatten(), scaler
+
+def inverse_transform(predictions, scaler):
+    predictions = np.array(predictions).reshape(-1, 1)
+    return scaler.inverse_transform(predictions).flatten()
+
+# Usage example
+if __name__ == "__main__":
+    stock_id = '2330'  # Example stock ID
+    model_path = './model/random_forest_stock.pkl'
+
+    data = get_stock_data_by_id_for_model(stock_id)
+    if data is None:
+        print("Stock data not found.")
+    else:
+        normalized_data, scaler = normalize_data(data)
+        model = load_model(model_path)
+        try:
+            prediction = predict(model, normalized_data)
+            actual_prices = inverse_transform(prediction, scaler)
+            print("results: ", actual_prices)
+        except ValueError as e:
+            print("error: ", e)

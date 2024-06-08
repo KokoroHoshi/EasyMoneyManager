@@ -9,6 +9,8 @@ flask-cors = "==4.0.1"
 yfinance = "*"
 twstock = "*"
 firebase-admin = "*"
+joblib = "*"
+scikit-learn = "*"
 
 [dev-packages]
 
