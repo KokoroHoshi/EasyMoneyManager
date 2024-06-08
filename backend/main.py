@@ -93,5 +93,15 @@ def get_stock_data_by_id_route():
 
     return jsonify(result)
 
+@app.route('/api/get/stock_prediction', methods=['GET'])
+def get_stock_prediction_by_id_route():
+    stock_id = request.args.get('stock_id', default='2330', type=str)
+
+    result = get_stock_prediction_by_id(stock_id)
+
+    return jsonify(result)
+
 if __name__ == "__main__":
+    init_model()
+
     app.run(debug=True)

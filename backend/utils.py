@@ -6,6 +6,9 @@ import joblib
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 
+model_path = './model/random_forest_stock.pkl'
+model = None
+
 def check_stock_exist(symbol):
     stock = yf.Ticker(symbol)
     return 'symbol' in stock.info
@@ -86,6 +89,28 @@ def get_stock_data_by_id(stock_id, timescale):
   
     return data
 
+def get_stock_prediction_by_id(stock_id):
+    global model
+
+    data = get_stock_data_by_id_for_model(stock_id)
+    if data is None:
+        return None
+    else:
+        normalized_data, scaler = normalize_data(data)
+        try:
+            prediction = predict(model, normalized_data)
+            prediction = inverse_transform(prediction, scaler)
+
+            # temporary
+            prediction_dict = {}
+            for i in range(len(prediction)):
+                prediction_dict[i] = prediction[i]
+
+            return prediction_dict
+        except ValueError as e:
+            print("error: ", e)
+            return None
+
 def get_stock_data_by_id_for_model(stock_id):
     found_stock = False
     for suffix in ['.TW', '.TWO']:
@@ -117,8 +142,12 @@ def get_stock_data_by_id_for_model(stock_id):
 
     return data
 
-def load_model(model_path):
-    return joblib.load(model_path)
+def init_model():
+    global model_path, model
+
+    model = joblib.load(model_path)
+
+    return
 
 def predict(model, x):
     if len(x) != 384:
@@ -126,7 +155,7 @@ def predict(model, x):
     
     y_hat = model.predict([x])
 
-    return y_hat.flatten()
+    return y_hat.flatten()[96:]
 
 def normalize_data(data):
     data = np.array(data).reshape(-1, 1)
@@ -137,21 +166,3 @@ def normalize_data(data):
 def inverse_transform(predictions, scaler):
     predictions = np.array(predictions).reshape(-1, 1)
     return scaler.inverse_transform(predictions).flatten()
-
-# Usage example
-if __name__ == "__main__":
-    stock_id = '2330'  # Example stock ID
-    model_path = './model/random_forest_stock.pkl'
-
-    data = get_stock_data_by_id_for_model(stock_id)
-    if data is None:
-        print("Stock data not found.")
-    else:
-        normalized_data, scaler = normalize_data(data)
-        model = load_model(model_path)
-        try:
-            prediction = predict(model, normalized_data)
-            actual_prices = inverse_transform(prediction, scaler)
-            print("results: ", actual_prices)
-        except ValueError as e:
-            print("error: ", e)
