@@ -1,5 +1,5 @@
 <template>
-  <div class="card p-3">
+  <div class="card p-3 record-card">
     <div class="mb-3">
       <label for="nameInput" class="form-label">Name</label>
       <input
@@ -38,7 +38,7 @@
           v-model="localRecord.selectedTags"
           :value="tag"
         />
-        <label class="form-check-label" :for="'checkbox-' + index">
+        <label class="form-check-label tags-font" :for="'checkbox-' + index">
           {{ tag }}
         </label>
       </div>
@@ -260,5 +260,16 @@ export default {
   font-weight: bold;
   width: 15rem;
   height: 3rem;
+}
+
+.record-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  font-size: 24px;
+  /* box-shadow: 2px 1px 4px #a5a5a5; */
+}
+
+.tags-font {
+  font-size: 20px;
 }
 </style>

@@ -88,7 +88,7 @@ export default {
 
 <style scoped>
 .block {
-  margin-top: 100px;
+  margin-top: 8vh;
 }
 
 .container {
@@ -96,11 +96,10 @@ export default {
   padding-top: 1%;
   padding-bottom: 1%;
   margin-left: auto;
-  box-shadow: 1px -1px 3px 0px rgb(166, 206, 206);
-  background-color: rgb(182, 209, 209);
   font-size: 25px;
   font-weight: bolder;
 }
+
 .records-container {
   margin-bottom: 1rem;
 }

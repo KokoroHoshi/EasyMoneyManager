@@ -1,13 +1,16 @@
 <template>
-  <TitleBar title="Record" />
+  <div class="page-container">
+    <TitleBar title="Record" />
 
-  <div class="block"></div>
+    <div class="block"></div>
 
-  <div class="container">
-    <RecordCard :record="emptyRecord" class="record-card" />
+    <div class="inner">
+      <div class="inner-content">
+        <RecordCard :record="emptyRecord" />
+      </div>
+    </div>
+    <BottomNavbar />
   </div>
-
-  <BottomNavbar />
 </template>
 
 <script>
@@ -40,19 +43,26 @@ export default {
   margin-top: clamp(20px, 3vw, 50px);
 }
 
-.record-card {
-  background-color: #d8c2b1;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 2px 1px 4px #6e6c6c;
-}
-
-.container {
-  position: absolute;
-  top: 20rem;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.inner {
+  display: flex;
+  width: 100%;
+  height: auto;
+  justify-content: center;
   font-size: 24px;
   font-weight: bolder;
+  padding-bottom: 5%;
+}
+
+.inner-content {
+  width: 80%;
+}
+
+.page-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
 }
 </style>

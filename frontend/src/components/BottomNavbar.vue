@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar fixed-bottom navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar fixed-bottom navbar-expand-lg navbar-light">
     <div class="mx-auto">
       <ul class="navbar-nav text-center">
         <li v-for="(link, index) in links" :key="index">
@@ -39,28 +39,54 @@ export default {
 </script>
 
 <style scoped>
-.nav-link {
-  font-size: 20px;
-  margin-right: 2rem;
-  margin-left: 2rem;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  height: 5rem;
-}
-
-.nav-link:hover {
-  background-color: gray;
-}
-
 .navbar {
   padding: 0;
   justify-content: center;
   display: flex;
+  height: 4rem;
+}
+
+.navbar-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 li {
-  height: 5rem;
   font-weight: bolder;
+  display: flex;
+  align-items: center;
+}
+
+.nav-link {
+  font-size: 1.25rem;
+  margin: 0 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4rem;
+  border-radius: 10px;
+}
+
+.nav-link:hover {
+  background-color: gray;
+  border-radius: 10px;
+}
+
+@media (max-width: 600px) {
+  .nav-link {
+    font-size: 1rem;
+    height: 2rem;
+    margin: 0 0.75rem;
+  }
+
+  .navbar {
+    height: 3rem;
+  }
+
+  li {
+    height: 3rem;
+  }
 }
 </style>
