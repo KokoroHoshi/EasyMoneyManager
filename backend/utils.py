@@ -121,17 +121,17 @@ def load_model(model_path):
     return joblib.load(model_path)
 
 def predict(model, x):
-    print(x.shape)
     if len(x) != 384:
         raise ValueError("Input shape must be (384,)")
-    y_hat = model.predict([x])  # model.predict expects 2D array
-    # print(f"Model raw output: {y_hat}") 
-    return y_hat[96:]
+    
+    y_hat = model.predict([x])
+
+    return y_hat.flatten()
 
 def normalize_data(data):
-    scaler = MinMaxScaler()
     data = np.array(data).reshape(-1, 1)
-    normalized_data = scaler.fit_transform(data)
+    scaler = MinMaxScaler(feature_range=(0, 1)).fit(data)
+    normalized_data = scaler.transform(data)
     return normalized_data.flatten(), scaler
 
 def inverse_transform(predictions, scaler):
