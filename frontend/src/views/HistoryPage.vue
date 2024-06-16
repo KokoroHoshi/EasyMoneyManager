@@ -25,6 +25,7 @@ import RecordView from "@/components/RecordView.vue";
 import axios from "axios";
 import { useAuth } from "@/useAuth";
 import { ref, onMounted } from "vue";
+import API_BASE_URL from "@/config";
 
 export default {
   beforeRouteEnter(to, from, next) {
@@ -51,7 +52,7 @@ export default {
       }
 
       axios
-        .get(`http://localhost:5000/api/get/records/${userId}/${date}`)
+        .get(`${API_BASE_URL}/api/get/records/${userId}/${date}`)
         .then((res) => {
           records.value = res.data.records;
         })
