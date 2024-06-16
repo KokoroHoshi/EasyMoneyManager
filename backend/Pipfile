@@ -11,6 +11,7 @@ twstock = "*"
 firebase-admin = "*"
 joblib = "*"
 scikit-learn = "*"
+gunicorn = "*"
 
 [dev-packages]
 
