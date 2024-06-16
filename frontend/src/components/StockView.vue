@@ -9,7 +9,9 @@
         </div>
         <div class="mb-3">
           <h5>current price: {{ currentPrice }}</h5>
-          <h5>predicted price: {{ predictedPrice }}</h5>
+          <h5 v-if="predictedPrice !== null">
+            predicted price: {{ predictedPrice }}
+          </h5>
         </div>
         <div class="mb-3">
           <select
@@ -170,8 +172,12 @@ export default {
           const data = res.data;
           console.log(data);
 
-          // temporary
-          this.predictedPrice = data["0"];
+          if (data === null) {
+            this.predictedPrice = null;
+          } else {
+            // temporary
+            this.predictedPrice = data["0"];
+          }
         })
         .catch((err) => {
           console.log(err);
