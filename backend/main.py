@@ -107,4 +107,5 @@ if __name__ == "__main__":
     except:
         print("Init model failed.")
 
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run()
