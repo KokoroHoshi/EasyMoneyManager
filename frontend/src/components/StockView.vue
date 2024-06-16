@@ -51,6 +51,7 @@ import {
 } from "chart.js";
 
 import SearchBar from "./SearchBar.vue";
+import API_BASE_URL from "@/config";
 
 ChartJS.register(
   CategoryScale,
@@ -112,7 +113,7 @@ export default {
   },
   methods: {
     fetchStockInfo() {
-      const path = `http://localhost:5000/api/get/stock_info?stock_id=${this.stockId}`;
+      const path = `${API_BASE_URL}/api/get/stock_info?stock_id=${this.stockId}`;
       axios
         .get(path)
         .then((res) => {
@@ -127,7 +128,7 @@ export default {
         });
     },
     fetchStockData() {
-      const path = `http://localhost:5000/api/get/stock_data?stock_id=${this.stockId}&timescale=${this.selectedTimeScale}`;
+      const path = `${API_BASE_URL}/api/get/stock_data?stock_id=${this.stockId}&timescale=${this.selectedTimeScale}`;
       axios
         .get(path)
         .then((res) => {
@@ -162,7 +163,7 @@ export default {
         });
     },
     getStockPrediction() {
-      const path = `http://localhost:5000/api/get/stock_prediction?stock_id=${this.stockId}`;
+      const path = `${API_BASE_URL}/api/get/stock_prediction?stock_id=${this.stockId}`;
       axios
         .get(path)
         .then((res) => {

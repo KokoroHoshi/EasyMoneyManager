@@ -20,6 +20,7 @@ import axios from "axios";
 import { useAuth } from "@/useAuth";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import API_BASE_URL from "@/config";
 
 export default {
   setup() {
@@ -40,7 +41,7 @@ export default {
         console.error("Record ID is missing");
         return;
       }
-      const path = `http://localhost:5000/api/get/record?user_id=${userInfo.value?.sub}&record_id=${recordId}`;
+      const path = `${API_BASE_URL}/api/get/record?user_id=${userInfo.value?.sub}&record_id=${recordId}`;
       axios
         .get(path)
         .then((res) => {
