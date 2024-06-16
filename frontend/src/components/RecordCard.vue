@@ -77,6 +77,7 @@
 import { useAuth } from "@/useAuth";
 import axios from "axios";
 import { toast } from "vue3-toastify";
+import API_BASE_URL from "@/config";
 
 export default {
   setup() {
@@ -197,8 +198,8 @@ export default {
       this.localRecord.record_id = this.$route.query.record_id;
 
       const url = this.localRecord.record_id
-        ? `http://localhost:5000/api/update/record`
-        : "http://localhost:5000/api/add/record";
+        ? `${API_BASE_URL}/api/update/record`
+        : `${API_BASE_URL}/api/add/record`;
 
       const method = this.localRecord.record_id ? "put" : "post";
 

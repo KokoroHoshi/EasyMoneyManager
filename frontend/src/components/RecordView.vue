@@ -42,6 +42,7 @@
 import axios from "axios";
 import { toast } from "vue3-toastify";
 import { useAuth } from "@/useAuth";
+import API_BASE_URL from "@/config";
 
 export default {
   setup() {
@@ -92,7 +93,7 @@ export default {
       };
 
       axios
-        .delete("http://localhost:5000/api/delete/record", { data: payload })
+        .delete(`${API_BASE_URL}/api/delete/record`, { data: payload })
         .then((response) => {
           console.log("Record deleted:", response.data);
           toast("Record deleted successfully", { type: "success" });
