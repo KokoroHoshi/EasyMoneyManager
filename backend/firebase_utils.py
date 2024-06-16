@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 if os.getenv('FLASK_ENV') == 'development':
     cred = credentials.Certificate('./firebaseServiceAccountKey.json')
 else:
-    firebase_service_account_key = os.getenv('FIREBASE_TOKEN')
+    firebase_service_account_key = os.getenv('FIREBASE_SERVICE_ACCOUNT_KEY')
     cred = credentials.Certificate(firebase_service_account_key)
 
 firebase_admin.initialize_app(cred)
