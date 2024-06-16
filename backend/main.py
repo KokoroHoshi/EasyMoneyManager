@@ -102,6 +102,9 @@ def get_stock_prediction_by_id_route():
     return jsonify(result)
 
 if __name__ == "__main__":
-    init_model()
+    try:
+        init_model()
+    except:
+        print("Init model failed.")
 
     app.run(debug=True)

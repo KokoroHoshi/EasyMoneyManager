@@ -92,6 +92,9 @@ def get_stock_data_by_id(stock_id, timescale):
 def get_stock_prediction_by_id(stock_id):
     global model
 
+    if model is None:
+        return None
+
     data = get_stock_data_by_id_for_model(stock_id)
     if data is None:
         return None
