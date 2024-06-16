@@ -1,24 +1,27 @@
-name: Deploy to Firebase Hosting on merge
-on:
-  push:
-    branches:
-      - main
+name: Deploy to Firebase Hosting on PR
+on: pull_request
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
 jobs:
-  build_and_deploy:
+  build_and_preview:
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       
       - name: Install dependencies and build
         working-directory: frontend
-        run: |
-          npm install
-          npm run build
+        run: npm install
       
       - name: Change directory to frontend
         run: cd frontend
-      
+
       - name: Deploy to Firebase Hosting
-        run: |
-          npx firebase deploy --token ${{ secrets.FIREBASE_TOKEN }} --only hosting
+      - run: npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EASYMONEYMANAGER_4FE76 }}
+          projectId: easymoneymanager-4fe76
