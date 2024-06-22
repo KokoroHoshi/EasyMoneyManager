@@ -7,7 +7,7 @@
         <div class="mb-3">
           <h3>{{ stockName }} ({{ stockId }})</h3>
         </div>
-        <div class="mb-3">
+        <div class="mb-3 d-flex justify-content-between">
           <h5>current price: {{ currentPrice }}</h5>
           <h5 v-if="predictedPrice !== null">
             predicted price: {{ predictedPrice }}

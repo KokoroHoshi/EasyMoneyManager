@@ -3,6 +3,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from datetime import datetime, timedelta
 
+# export FLASK_ENV=development
 if os.getenv('FLASK_ENV') == 'development':
     cred = credentials.Certificate('./firebaseServiceAccountKey.json')
 else:
