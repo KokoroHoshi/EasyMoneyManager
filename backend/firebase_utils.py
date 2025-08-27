@@ -3,7 +3,9 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 from datetime import datetime, timedelta
 
-# export FLASK_ENV=development
+# 若要在本機運行，請先設定環境變數：
+# Linux/macOS: export FLASK_ENV=development
+# Windows PowerShell: $env:FLASK_ENV = "development"
 if os.getenv('FLASK_ENV') == 'development':
     cred = credentials.Certificate('./firebaseServiceAccountKey.json')
 else:
