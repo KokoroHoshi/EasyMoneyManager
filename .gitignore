@@ -2,6 +2,23 @@
 node_modules
 /frontend/dist
 
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+Pipfile.lock
+
+# Firebase
+firebaseServiceAccountKey.json
+
+# VSCode/IDE
+.vscode/
+.idea/
+
+# Others
+package-lock.json
+
 
 # local env files
 .env.local
