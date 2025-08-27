@@ -45,9 +45,16 @@ EasyMoneyManager 是一款簡易的記帳 Web App，支援 Google 登錄，並�
 
 請參考 `frontend/.env.example`，複製為 `.env.local` 或 `.env.production` 並填入自己的 Google Client ID 與 API Base URL。
 
+
 ### Firebase 服務帳戶金鑰
 
 後端需使用 Firebase 服務帳戶金鑰檔案 `firebaseServiceAccountKey.json`，請至 Firebase 專案設定下載，並放在 `backend` 資料夾（或依程式指定路徑）。此檔案用於串接 Firestore 資料庫。
+
+### 本機開發環境變數
+
+若要在本機運行後端，請先設定環境變數：
+- Linux/macOS: `export FLASK_ENV=development`
+- Windows PowerShell: `$env:FLASK_ENV = "development"`
 
 ### Google OAuth 2.0 設定說明
 
@@ -90,6 +97,10 @@ cd backend
 python -m venv .venv
 .\.venv\Scripts\Activate # Windows
 pip install -r requirements.txt
+ 
+# 本機運行前，請設定環境變數：
+# Linux/macOS: export FLASK_ENV=development
+# Windows PowerShell: $env:FLASK_ENV = "development"
 python main.py
 ```
 

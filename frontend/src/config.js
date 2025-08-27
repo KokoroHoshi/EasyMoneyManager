@@ -1,5 +1,2 @@
-// const API_BASE_URL = "http://localhost:5000";
-
-const API_BASE_URL = "https://easymoneymanager.onrender.com";
-
+const API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
 export default API_BASE_URL;
