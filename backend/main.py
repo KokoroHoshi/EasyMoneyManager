@@ -10,6 +10,10 @@ app.config.from_object(__name__)
 
 CORS(app, resources={r"/*":{'origins':"*"}})
 
+@app.route('/', methods=['GET'])
+def root():
+    return jsonify({'status': 'success', 'message': 'HHW!'}), 200
+
 @app.route('/api/add/record', methods=['POST'])
 def add_record_route():
     data = request.get_json()

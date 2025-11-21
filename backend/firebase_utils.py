@@ -1,15 +1,16 @@
 import os
+from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials, firestore
 from datetime import datetime, timedelta
 
-# 若要在本機運行，請先設定環境變數：
-# Linux/macOS: export FLASK_ENV=development
-# Windows PowerShell: $env:FLASK_ENV = "development"
-if os.getenv('FLASK_ENV') == 'development':
-    cred = credentials.Certificate('./firebaseServiceAccountKey.json')
+load_dotenv()
+
+cred_path = os.getenv('FIREBASE_CRED_PATH')
+if not cred_path:
+    raise ValueError("請設定環境變數 FIREBASE_CRED_PATH 指向 Firebase 憑證")
 else:
-    cred = credentials.Certificate('/etc/secrets/firebaseServiceAccountKey.json')
+    cred = credentials.Certificate(cred_path)
 
 firebase_admin.initialize_app(cred)
 db = firestore.client()
