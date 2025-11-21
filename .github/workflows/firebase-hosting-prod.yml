@@ -6,7 +6,7 @@ on:
 permissions:
   checks: write
   contents: read
-  pull-requests: write
+
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
@@ -16,7 +16,7 @@ jobs:
       - name: Install dependencies and build
         run: |
           cd frontend
-          npm install
+          npm ci
           npm run build --verbose
 
       - name: Deploy to Firebase Hosting
@@ -26,3 +26,4 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EASYMONEYMANAGER_4FE76 }}
           projectId: easymoneymanager-4fe76
           entryPoint: frontend
+          target: easymoneymanager-4fe76
