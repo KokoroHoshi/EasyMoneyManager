@@ -18,6 +18,9 @@ jobs:
           cd frontend
           npm ci
           npm run build --verbose
+        env:
+          VUE_APP_API_BASE_URL: ${{ secrets.VUE_APP_API_BASE_URL }}
+          VUE_APP_GOOGLE_CLIENT_ID: ${{ secrets.VUE_APP_GOOGLE_CLIENT_ID }}
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
