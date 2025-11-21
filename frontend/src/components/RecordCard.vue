@@ -121,6 +121,24 @@ export default {
     };
   },
   computed: {
+    // tagsArray 統一返回陣列
+    tagsArray() {
+      const t = this.record.tags;
+
+      if (Array.isArray(t)) {
+        // 本來就是陣列，直接回傳
+        return t;
+      } else if (typeof t === "string") {
+        // 後端可能傳字串，切割成陣列
+        return t
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter((tag) => tag);
+      } else {
+        // 其他情況，保證回傳空陣列
+        return [];
+      }
+    },
     mergedTags() {
       return [
         ...new Set([...this.defaultTags, ...this.localRecord.selectedTags]),
@@ -131,7 +149,7 @@ export default {
     record: {
       immediate: true,
       handler(newRecord) {
-        this.localRecord = { ...newRecord, selectedTags: [...newRecord.tags] };
+        this.localRecord = { ...newRecord, selectedTags: this.tagsArray };
         this.formattedDate = this.formatDateForInput(newRecord.date); // Format date for input
       },
     },
@@ -168,10 +186,11 @@ export default {
     },
     async submit(type) {
       if (
-        (!this.localRecord.amount && this.localRecord.amount !== 0) ||
-        isNaN(this.localRecord.amount)
+        !this.localRecord.amount ||
+        isNaN(this.localRecord.amount) ||
+        this.localRecord.amount <= 0
       ) {
-        alert("Please enter a valid number for the amount.");
+        alert("Please enter a valid positive number for the amount.");
         return;
       }
 
@@ -182,17 +201,38 @@ export default {
         this.localRecord.date = now.toISOString().slice(0, 16);
       }
 
+      const recordData = {
+        name: this.localRecord.name,
+        amount: this.localRecord.amount,
+        tags: this.localRecord.selectedTags,
+        type: this.localRecord.type,
+        date: this.localRecord.date,
+      };
+
+      // 未登入先儲存到localStorage
+      if (!this.userInfo || !this.userInfo.sub) {
+        let guestRecords = JSON.parse(
+          localStorage.getItem("guest_records") || "[]"
+        );
+        recordData.record_id = "guest_" + Date.now();
+        guestRecords.push(recordData);
+        localStorage.setItem("guest_records", JSON.stringify(guestRecords));
+
+        toast(`Saved locally: ${recordData.name} $${recordData.amount}`, {
+          theme: "colored",
+          type: recordData.type === "income" ? "success" : "error",
+          position: "top-center",
+          pauseOnFocusLoss: false,
+          dangerouslyHTMLString: true,
+        });
+
+        this.cleanForm();
+        return;
+      }
+
       const payload = {
         userId: this.userInfo.sub,
-        records: [
-          {
-            name: this.localRecord.name,
-            amount: this.localRecord.amount,
-            tags: this.localRecord.selectedTags,
-            type: this.localRecord.type,
-            date: this.localRecord.date,
-          },
-        ],
+        records: [recordData],
       };
 
       this.localRecord.record_id = this.$route.query.record_id;

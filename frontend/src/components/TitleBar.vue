@@ -3,30 +3,41 @@
     class="navbar navbar-expand-lg navbar-light d-flex justify-content-between"
   >
     <h1 class="ms-3">{{ title }}</h1>
-    <div v-if="loggedIn" class="dropdown me-3">
-      <button
-        class="btn btn-light user-avatar-btn rounded-circle p-0"
-        type="button"
-        id="userDropdown"
-        aria-expanded="false"
-        @click="toggleDropdown"
-      >
-        <img
-          :src="userInfo.picture"
-          alt="User Avatar"
-          class="rounded-circle user-avatar-img"
-        />
-      </button>
-      <ul
-        id="dropdown-menu"
-        class="dropdown-menu dropdown-menu-end mt-2 me-2"
-        aria-labelledby="userDropdown"
-        :class="{ show: isDropdownOpen }"
-      >
-        <li>
-          <a class="dropdown-item" href="#" @click="handleLogout">Log out</a>
-        </li>
-      </ul>
+
+    <div class="me-3">
+      <!-- 已登入且非 guest 顯示頭像 -->
+      <div v-if="loggedIn && !isGuest" class="dropdown">
+        <button
+          class="btn btn-light user-avatar-btn rounded-circle p-0"
+          type="button"
+          id="userDropdown"
+          aria-expanded="false"
+          @click="toggleDropdown"
+        >
+          <img
+            :src="userInfo.picture"
+            alt="User Avatar"
+            class="rounded-circle user-avatar-img"
+          />
+        </button>
+        <ul
+          id="dropdown-menu"
+          class="dropdown-menu dropdown-menu-end mt-2 me-2"
+          aria-labelledby="userDropdown"
+          :class="{ show: isDropdownOpen }"
+        >
+          <li>
+            <a class="dropdown-item" href="#" @click="handleLogout">Log out</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- 未登入顯示 Sign In 按鈕 -->
+      <div v-else-if="!loggedIn">
+        <button class="btn btn-primary" @click="redirectToLogin">
+          Sign In
+        </button>
+      </div>
     </div>
   </nav>
 </template>
@@ -59,13 +70,16 @@ export default {
       router.push("/");
     };
 
+    const redirectToLogin = () => {
+      router.push("/"); // login 頁面
+    };
+
     const handleClickOutside = (event) => {
       if (
         isDropdownOpen.value &&
         !event.target.closest("#dropdown-menu") &&
         !event.target.closest("#userDropdown")
       ) {
-        console.log(event);
         isDropdownOpen.value = false;
       }
     };
@@ -85,6 +99,7 @@ export default {
       isDropdownOpen,
       toggleDropdown,
       handleLogout,
+      redirectToLogin,
     };
   },
 };
@@ -122,6 +137,9 @@ h1 {
   padding-left: 4.2rem;
   font-weight: bolder;
   margin: auto;
-  /* text-shadow: rgb(188, 188, 188) 0.05em 0.05em 0.05em; */
+}
+
+.btn-primary {
+  min-width: 100px;
 }
 </style>

@@ -5,10 +5,14 @@
     <TimeSelector @date-selected="getRecordsByDate" />
     <div
       class="records-container"
-      v-for="(record, index) in records"
-      :key="index"
+      v-for="record in records"
+      :key="record.record_id"
     >
-      <RecordView :record="record" @recordDeleted="removeRecord" />
+      <RecordView
+        v-if="record"
+        :record="record"
+        @recordDeleted="removeRecord"
+      />
     </div>
   </div>
 
@@ -47,7 +51,17 @@ export default {
       }
       const userId = userInfo.value?.sub;
       if (!userId) {
-        console.error("User info not available.");
+        // guest 模式：從 localStorage 讀取
+        const guestRecords = JSON.parse(
+          localStorage.getItem("guest_records") || "[]"
+        );
+
+        records.value = guestRecords
+          .filter((rec) => rec.date && rec.date.startsWith(date))
+          .map((rec) => ({
+            ...rec,
+            tags: Array.isArray(rec.tags) ? rec.tags : [], // 防呆，保證陣列
+          }));
         return;
       }
 
@@ -66,6 +80,8 @@ export default {
     });
 
     const removeRecord = (recordId) => {
+      // RecordView has already handled deleting from storage (localStorage or server)
+      // Here we just remove from the local records array to update UI
       records.value = records.value.filter(
         (record) => record.record_id !== recordId
       );

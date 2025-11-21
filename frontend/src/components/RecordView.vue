@@ -61,7 +61,18 @@ export default {
   },
   computed: {
     tagsArray() {
-      return this.record.tags ? this.record.tags.split(",") : [];
+      const t = this.record.tags;
+
+      if (Array.isArray(t)) {
+        return t;
+      } else if (typeof t === "string") {
+        return t
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter((tag) => tag);
+      } else {
+        return [];
+      }
     },
     formattedDate() {
       if (!this.record.date) return "";
@@ -87,8 +98,25 @@ export default {
       }
     },
     deleteRecord() {
+      const userId = this.userInfo?.sub;
+
+      if (!userId) {
+        // Guest 模式：删除 localStorage
+        let guestRecords = JSON.parse(
+          localStorage.getItem("guest_records") || "[]"
+        );
+        guestRecords = guestRecords.filter(
+          (rec) => rec.record_id !== this.record.record_id
+        );
+        localStorage.setItem("guest_records", JSON.stringify(guestRecords));
+
+        toast("Record deleted successfully", { type: "success" });
+        this.$emit("recordDeleted", this.record.record_id);
+        return;
+      }
+
       const payload = {
-        userId: this.userInfo.sub,
+        userId: userId,
         record_id: this.record.record_id,
       };
 
