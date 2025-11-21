@@ -17,7 +17,7 @@ jobs:
         run: |
           cd frontend
           npm install
-          npm run build
+          npm run build --verbose
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
