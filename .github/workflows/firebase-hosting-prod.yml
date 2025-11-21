@@ -14,15 +14,14 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install dependencies and build
-        working-directory: frontend
         run: |
+          cd frontend
           npm install
           npm run build
 
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          working-directory: frontend
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EASYMONEYMANAGER_4FE76 }}
           projectId: easymoneymanager-4fe76
