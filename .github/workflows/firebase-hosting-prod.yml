@@ -26,4 +26,4 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_EASYMONEYMANAGER_4FE76 }}
           projectId: easymoneymanager-4fe76
           entryPoint: frontend
-          target: easymoneymanager-4fe76
+          channelId: live
