@@ -1,4 +1,5 @@
 import os
+import json
 from dotenv import load_dotenv
 import firebase_admin
 from firebase_admin import credentials, firestore
@@ -7,12 +8,23 @@ from datetime import datetime, timedelta
 load_dotenv()
 
 cred_path = os.getenv('FIREBASE_CRED_PATH')
-if not cred_path:
-    raise ValueError("請設定環境變數 FIREBASE_CRED_PATH 指向 Firebase 憑證")
-else:
+if cred_path and os.path.exists(cred_path):
     cred = credentials.Certificate(cred_path)
+else:
+    firebase_json = os.getenv("FIREBASE_CREDENTIALS")
+
+    if not firebase_json:
+        raise ValueError(
+            "找不到 Firebase 憑證：\n"
+            "- 請確定 FIREBASE_CRED_PATH 指向檔案\n"
+            "- 或設定環境變數 FIREBASE_CREDENTIALS"
+        )
+
+    cred_info = json.loads(firebase_json)
+    cred = credentials.Certificate(cred_info)
 
 firebase_admin.initialize_app(cred)
+
 db = firestore.client()
 
 def add_record(user_id, record):
