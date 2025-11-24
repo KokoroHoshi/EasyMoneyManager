@@ -41,32 +41,48 @@ export default {
     const { userInfo } = useAuth();
     const records = ref([]);
 
-    const getRecordsByDate = (date) => {
-      if (!date) {
+    const getRecordsByDate = ({ startUTC, endUTC } = {}) => {
+      // 如果 startUTC/endUTC 不存在，改用今天
+      if (!startUTC || !endUTC) {
         const today = new Date();
-        date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
-          2,
-          "0"
-        )}-${String(today.getDate()).padStart(2, "0")}`;
+        const localStart = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+          0,
+          0,
+          0
+        );
+        const localEnd = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+          23,
+          59,
+          59
+        );
+        startUTC = localStart.toISOString();
+        endUTC = localEnd.toISOString();
       }
+
       const userId = userInfo.value?.sub;
       if (!userId) {
-        // guest 模式：從 localStorage 讀取
+        // guest 模式
         const guestRecords = JSON.parse(
           localStorage.getItem("guest_records") || "[]"
         );
-
-        records.value = guestRecords
-          .filter((rec) => rec.date && rec.date.startsWith(date))
-          .map((rec) => ({
-            ...rec,
-            tags: Array.isArray(rec.tags) ? rec.tags : [], // 防呆，保證陣列
-          }));
+        records.value = guestRecords.filter((rec) => {
+          const recDate = new Date(rec.date);
+          return recDate >= new Date(startUTC) && recDate <= new Date(endUTC);
+        });
         return;
       }
 
+      // 已登入 → 後端查詢
       axios
-        .get(`${API_BASE_URL}/api/get/records/${userId}/${date}`)
+        .get(`${API_BASE_URL}/api/get/record`, {
+          params: { user_id: userId, start: startUTC, end: endUTC },
+        })
         .then((res) => {
           records.value = res.data.records;
         })

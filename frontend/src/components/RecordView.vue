@@ -76,20 +76,27 @@ export default {
     },
     formattedDate() {
       if (!this.record.date) return "";
-      const date = new Date(this.record.date);
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const day = String(date.getDate()).padStart(2, "0");
-      const hours = String(date.getHours()).padStart(2, "0");
-      const minutes = String(date.getMinutes()).padStart(2, "0");
-      return `${year}-${month}-${day} ${hours}:${minutes}`;
+      return new Date(this.record.date).toLocaleString("zh-TW", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
     },
   },
   methods: {
     navigateToEdit() {
+      if (!this.record.record_id) {
+        console.error("record_id is missing!");
+        return;
+      }
+
       this.$router.push({
         name: "EditPage",
-        query: { record_id: this.record.record_id },
+        query: {
+          record_id: this.record.record_id,
+        },
       });
     },
     confirmDelete() {

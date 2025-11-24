@@ -67,19 +67,35 @@ export default {
   },
   methods: {
     updateDate() {
-      const daysInSelectedMonth = new Date(
-        this.selectedYear,
-        this.selectedMonth,
-        0
-      ).getDate();
-      if (this.selectedDay > daysInSelectedMonth) {
-        this.selectedDay = daysInSelectedMonth;
-      }
+      // JavaScript 的月份要 -1
+      const monthIndex = this.selectedMonth - 1;
 
-      const selectedDate = `${this.selectedYear}-${String(
-        this.selectedMonth
-      ).padStart(2, "0")}-${String(this.selectedDay).padStart(2, "0")}`;
-      this.$emit("date-selected", selectedDate);
+      // 當天 Local 的起始時間 00:00:00
+      const localStart = new Date(
+        this.selectedYear,
+        monthIndex,
+        this.selectedDay,
+        0,
+        0,
+        0
+      );
+
+      // 當天 Local 的結束時間 23:59:59
+      const localEnd = new Date(
+        this.selectedYear,
+        monthIndex,
+        this.selectedDay,
+        23,
+        59,
+        59
+      );
+
+      // 轉成 UTC ISO 字串
+      const startUTC = localStart.toISOString();
+      const endUTC = localEnd.toISOString();
+
+      // 回傳給父元件（HistoryPage）
+      this.$emit("date-selected", { startUTC, endUTC });
     },
   },
 };

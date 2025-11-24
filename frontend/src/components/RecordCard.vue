@@ -176,7 +176,9 @@ export default {
       return `${year}-${month}-${day}T${hours}:${minutes}`;
     },
     updateLocalRecordDate(event) {
-      this.localRecord.date = event.target.value;
+      const local = event.target.value;
+      const date = new Date(local);
+      this.localRecord.date = date.toISOString();
     },
     addTag() {
       const newTag = prompt("Input new tag:");
@@ -198,7 +200,7 @@ export default {
 
       if (!this.localRecord.record_id) {
         const now = new Date();
-        this.localRecord.date = now.toISOString().slice(0, 16);
+        this.localRecord.date = now.toISOString();
       }
 
       const recordData = {

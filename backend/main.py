@@ -31,8 +31,11 @@ def add_record_route():
 
 @app.route('/api/get/record', methods=['GET'])
 def get_record_route():
+    print("Route hit!")  # 確認 route 有被呼叫
     user_id = request.args.get('user_id')
     record_id = request.args.get('record_id')
+
+    print("DEBUG: user_id=", user_id, " record_id=", record_id)  # <--- 加這行
 
     if not user_id or not record_id:
         return jsonify({'status': 'error', 'message': 'Missing user_id or record_id'}), 400
@@ -72,10 +75,24 @@ def delete_record_route():
 
     return jsonify({'status': 'success'}), 200
 
-@app.route('/api/get/records/<user_id>/<date>', methods=['GET'])
-def get_records_route(user_id, date):
+@app.route('/api/get/records', methods=['GET'])
+def get_records_route():
+    user_id = request.args.get('user_id')
+    start_utc = request.args.get('start')  # ISO 字串
+    end_utc = request.args.get('end')      # ISO 字串
+
+    if not user_id or not start_utc or not end_utc:
+        return jsonify({'status': 'error', 'message': 'Missing parameters'}), 400
+
     try:
-        records = get_records_by_date(user_id, date)
+        # 轉成 datetime
+        from datetime import datetime
+        start_dt = datetime.fromisoformat(start_utc.replace("Z", "+00:00"))
+        end_dt = datetime.fromisoformat(end_utc.replace("Z", "+00:00"))
+
+        # 從資料庫抓 UTC 範圍
+        records = get_records_by_utc_range(user_id, start_dt, end_dt)
+
         return jsonify({'status': 'success', 'records': records}), 200
     except Exception as e:
         return jsonify({'status': 'failure', 'message': str(e)}), 400
