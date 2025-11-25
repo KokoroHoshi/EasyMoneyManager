@@ -18,7 +18,7 @@ import BottomNavbar from "@/components/BottomNavbar.vue";
 import RecordCard from "@/components/RecordCard.vue";
 import axios from "axios";
 import { useAuth } from "@/useAuth";
-import { ref, watch } from "vue";
+import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import API_BASE_URL from "@/config";
 
@@ -39,8 +39,31 @@ export default {
       const userId = userInfo.value?.sub;
       const recordId = route.query.record_id;
 
-      if (!recordId || !userId) {
-        console.error("Record ID or user ID is missing");
+      if (!recordId) {
+        console.error("Record ID is missing");
+        return;
+      }
+
+      // 未登入從localStorage找
+      if (!userId) {
+        let guestRecords = JSON.parse(
+          localStorage.getItem("guest_records") || "[]"
+        );
+        const target = guestRecords.find((r) => r.record_id === recordId);
+
+        if (!target) {
+          console.error("Guest record not found");
+          return;
+        }
+
+        target.tags = Array.isArray(target.tags)
+          ? target.tags
+          : (target.tags || "")
+              .split(",")
+              .map((t) => t.trim())
+              .filter((t) => t);
+
+        record.value = { ...target };
         return;
       }
 
@@ -63,14 +86,9 @@ export default {
         });
     };
 
-    // watch userInfo，userInfo 準備好後才抓資料
-    watch(
-      () => userInfo.value,
-      (val) => {
-        if (val?.sub) getRecord();
-      },
-      { immediate: true } // 頁面一載入就檢查一次
-    );
+    onMounted(() => {
+      getRecord();
+    });
 
     return {
       userInfo,

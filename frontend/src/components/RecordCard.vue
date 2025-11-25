@@ -211,13 +211,30 @@ export default {
         date: this.localRecord.date,
       };
 
-      // 未登入先儲存到localStorage
+      // ========================
+      // 未登入(guest模式)儲存到LocalStorage
+      // ========================
       if (!this.userInfo || !this.userInfo.sub) {
         let guestRecords = JSON.parse(
           localStorage.getItem("guest_records") || "[]"
         );
-        recordData.record_id = "guest_" + Date.now();
-        guestRecords.push(recordData);
+
+        // 若是編輯模式 → 更新原本那筆
+        if (this.localRecord.record_id) {
+          const index = guestRecords.findIndex(
+            (r) => r.record_id === this.localRecord.record_id
+          );
+
+          if (index !== -1) {
+            recordData.record_id = this.localRecord.record_id;
+            guestRecords[index] = recordData;
+          }
+        } else {
+          // 新增模式 → 產生新 ID
+          recordData.record_id = "guest_" + Date.now();
+          guestRecords.push(recordData);
+        }
+
         localStorage.setItem("guest_records", JSON.stringify(guestRecords));
 
         toast(`Saved locally: ${recordData.name} $${recordData.amount}`, {
@@ -228,14 +245,20 @@ export default {
           dangerouslyHTMLString: true,
         });
 
+        if (this.$route.name === "EditPage") {
+          setTimeout(() => {
+            this.$router.push({ name: "HistoryPage" });
+          }, 300); // 讓 toast 有時間顯示
+          return;
+        }
+
         this.cleanForm();
         return;
       }
 
-      const payload = {
-        userId: this.userInfo.sub,
-        records: [recordData],
-      };
+      // ========================
+      // 登入模式
+      // ========================
 
       this.localRecord.record_id = this.$route.query.record_id;
 
@@ -245,33 +268,39 @@ export default {
 
       const method = this.localRecord.record_id ? "put" : "post";
 
-      await axios[method](
-        url,
-        this.localRecord.record_id
-          ? {
-              userId: this.userInfo.sub,
-              record_id: this.localRecord.record_id,
-              record: payload.records[0],
-            }
-          : payload
-      )
-        .then(() => {
-          toast(`${payload.records[0].name} $ ${payload.records[0].amount}`, {
-            theme: "colored",
-            type: payload.records[0].type === "income" ? "success" : "error",
-            position: "top-center",
-            pauseOnFocusLoss: false,
-            dangerouslyHTMLString: true,
-          });
-        })
-        .catch((err) => {
-          console.error("Error saving data:", err);
+      try {
+        await axios[method](
+          url,
+          this.localRecord.record_id
+            ? {
+                userId: this.userInfo.sub,
+                record_id: this.localRecord.record_id,
+                record: recordData,
+              }
+            : {
+                userId: this.userInfo.sub,
+                records: [recordData],
+              }
+        );
+
+        // 確保 toast 一定觸發
+        toast(`Saved: ${recordData.name} $${recordData.amount}`, {
+          theme: "colored",
+          type: recordData.type === "income" ? "success" : "error",
+          position: "top-center",
+          pauseOnFocusLoss: false,
+          dangerouslyHTMLString: true,
         });
 
-      if (this.$route.name === "RecordPage") {
-        this.cleanForm();
-      } else if (this.$route.name === "EditPage") {
-        this.$router.push({ name: "HistoryPage" });
+        if (this.$route.name === "EditPage") {
+          setTimeout(() => {
+            this.$router.push({ name: "HistoryPage" });
+          }, 300); // 讓 toast 有時間顯示
+        } else {
+          this.cleanForm();
+        }
+      } catch (err) {
+        console.error("Error saving data:", err);
       }
     },
     cleanForm() {
