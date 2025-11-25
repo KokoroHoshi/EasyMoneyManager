@@ -38,7 +38,6 @@ export default {
     const getRecord = () => {
       const userId = userInfo.value?.sub;
       const recordId = route.query.record_id;
-      console.log("DEBUG getRecord:", { userId, recordId });
 
       if (!recordId || !userId) {
         console.error("Record ID or user ID is missing");
@@ -60,6 +59,7 @@ export default {
         })
         .catch((err) => {
           console.error("Error fetching record:", err);
+          console.error("Error response data:", err.response.data);
         });
     };
 

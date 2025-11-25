@@ -80,7 +80,7 @@ export default {
 
       // 已登入 → 後端查詢
       axios
-        .get(`${API_BASE_URL}/api/get/record`, {
+        .get(`${API_BASE_URL}/api/get/records`, {
           params: { user_id: userId, start: startUTC, end: endUTC },
         })
         .then((res) => {

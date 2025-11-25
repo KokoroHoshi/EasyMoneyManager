@@ -38,7 +38,7 @@ def get_record_route():
     print("DEBUG: user_id=", user_id, " record_id=", record_id)  # <--- 加這行
 
     if not user_id or not record_id:
-        return jsonify({'status': 'error', 'message': 'Missing user_id or record_id'}), 400
+        return jsonify({'status': 'error', 'message': 'Missing user_id or record_id', 'user_id': repr(user_id), 'record_id': repr(record_id)}), 400
 
     record = get_record(user_id, record_id)
     if record:
