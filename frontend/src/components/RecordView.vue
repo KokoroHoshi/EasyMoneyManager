@@ -40,16 +40,18 @@
 
 <script>
 import axios from "axios";
-import { toast } from "vue3-toastify";
 import { useAuth } from "@/useAuth";
 import API_BASE_URL from "@/config";
+import { useToastStore } from "@/stores/toastStore";
 
 export default {
   setup() {
     const { userInfo } = useAuth();
+    const toastStore = useToastStore();
 
     return {
       userInfo,
+      toastStore,
     };
   },
   props: {
@@ -117,7 +119,7 @@ export default {
         );
         localStorage.setItem("guest_records", JSON.stringify(guestRecords));
 
-        toast("Record deleted successfully", { type: "success" });
+        this.toastStore.add("Record deleted successfully", "success");
         this.$emit("recordDeleted", this.record.record_id);
         return;
       }
@@ -131,12 +133,12 @@ export default {
         .delete(`${API_BASE_URL}/api/delete/record`, { data: payload })
         .then((response) => {
           console.log("Record deleted:", response.data);
-          toast("Record deleted successfully", { type: "success" });
+          this.toastStore.add("Record deleted successfully", "success");
           this.$emit("recordDeleted", this.record.record_id);
         })
         .catch((error) => {
           console.error("Error deleting record:", error);
-          toast("Error deleting record", { type: "error" });
+          this.toastStore.add("Error deleting record", "error");
         });
     },
   },

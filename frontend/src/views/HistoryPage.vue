@@ -32,11 +32,6 @@ import { ref, onMounted } from "vue";
 import API_BASE_URL from "@/config";
 
 export default {
-  beforeRouteEnter(to, from, next) {
-    next((vm) => {
-      vm.getRecordsByDate();
-    });
-  },
   setup() {
     const { userInfo } = useAuth();
     const records = ref([]);

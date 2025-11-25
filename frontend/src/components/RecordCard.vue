@@ -76,15 +76,17 @@
 <script>
 import { useAuth } from "@/useAuth";
 import axios from "axios";
-import { toast } from "vue3-toastify";
 import API_BASE_URL from "@/config";
+import { useToastStore } from "@/stores/toastStore";
 
 export default {
   setup() {
     const { userInfo } = useAuth();
+    const toastStore = useToastStore();
 
     return {
       userInfo,
+      toastStore,
     };
   },
   props: {
@@ -237,20 +239,21 @@ export default {
 
         localStorage.setItem("guest_records", JSON.stringify(guestRecords));
 
-        toast(`Saved locally: ${recordData.name} $${recordData.amount}`, {
-          theme: "colored",
-          type: recordData.type === "income" ? "success" : "error",
-          position: "top-center",
-          pauseOnFocusLoss: false,
-          dangerouslyHTMLString: true,
-        });
-
         if (this.$route.name === "EditPage") {
-          setTimeout(() => {
-            this.$router.push({ name: "HistoryPage" });
-          }, 300); // 讓 toast 有時間顯示
+          this.toastStore.add(
+            `Saved locally: ${recordData.name} $${recordData.amount}`,
+            recordData.type === "income" ? "success" : "error",
+            false
+          );
+
+          this.$router.push({ name: "HistoryPage" });
           return;
         }
+
+        this.toastStore.add(
+          `Saved locally: ${recordData.name} $${recordData.amount}`,
+          recordData.type === "income" ? "success" : "error"
+        );
 
         this.cleanForm();
         return;
@@ -283,20 +286,18 @@ export default {
               }
         );
 
-        // 確保 toast 一定觸發
-        toast(`Saved: ${recordData.name} $${recordData.amount}`, {
-          theme: "colored",
-          type: recordData.type === "income" ? "success" : "error",
-          position: "top-center",
-          pauseOnFocusLoss: false,
-          dangerouslyHTMLString: true,
-        });
-
         if (this.$route.name === "EditPage") {
-          setTimeout(() => {
-            this.$router.push({ name: "HistoryPage" });
-          }, 300); // 讓 toast 有時間顯示
+          this.toastStore.add(
+            `Saved: ${recordData.name} $${recordData.amount}`,
+            recordData.type === "income" ? "success" : "error",
+            false
+          );
+          this.$router.push({ name: "HistoryPage" });
         } else {
+          this.toastStore.add(
+            `Saved: ${recordData.name} $${recordData.amount}`,
+            recordData.type === "income" ? "success" : "error"
+          );
           this.cleanForm();
         }
       } catch (err) {
