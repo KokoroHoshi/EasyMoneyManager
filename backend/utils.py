@@ -13,21 +13,21 @@ def check_stock_exist(symbol):
     stock = yf.Ticker(symbol)
     return 'symbol' in stock.info
 
-def get_stock_info_by_id(stock_id):
-    stock = twstock.realtime.get(stock_id)
+def get_stock_info_by_id(stock_id: str):
+    """
+    stock_id: e.g. '0050' for 0050.TW
+    """
+    symbol = f"{stock_id}.TW"
+    stock = yf.Ticker(symbol)
     
-    if not stock['success']:
-        return None
-    
-    data = get_stock_data_by_id(stock_id, '1D')
+    info = stock.info  # 股票資訊
+    current_price = info.get('regularMarketPrice')  # 即時價格
 
-    info = {
-        'stock_name': stock['info']['fullname'],
-        'stock_id': stock['info']['code'],
-        'current_price': round(data[list(data)[-1]]['Close'], 2)
+    return {
+        'stock_name': info.get('longName') or info.get('shortName'),
+        'stock_id': stock_id,
+        'current_price': current_price
     }
-
-    return info
 
 def get_stock_data_by_id(stock_id, timescale):
     # interval
